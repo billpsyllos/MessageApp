@@ -20,5 +20,6 @@
     <string name="login_alertText">ERROR!! Please type again all inputs without whitespaces</string>
     <string name="sign_up_error_title">Ooops!</string>
     <string name="login_error_title">Ooops!</string>
+    <string name="menu_logout_label">Logout</string>
 
 </resources>
