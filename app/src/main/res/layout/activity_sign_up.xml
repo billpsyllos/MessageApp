@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/passwordHint"
+        android:id="@+id/passwordField"
         android:hint="@string/password_hint"
         android:layout_below="@+id/usernameField"
         android:layout_alignParentRight="true"
@@ -35,7 +35,7 @@
         android:ems="10"
         android:id="@+id/emailField"
         android:hint="@string/email_hint"
-        android:layout_below="@+id/passwordHint"
+        android:layout_below="@+id/passwordField"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
