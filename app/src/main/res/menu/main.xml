@@ -9,5 +9,10 @@
     android:title="@string/menu_edit_friends_label"
     android:orderInCategory="100"
     android:showAsAction="never" />
+    <item android:id="@+id/action_camera"
+        android:title="@string/menu_camera_label"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_camera"/>
 
 </menu>
