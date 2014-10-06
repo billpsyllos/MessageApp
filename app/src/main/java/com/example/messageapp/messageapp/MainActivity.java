@@ -222,7 +222,7 @@ public class MainActivity extends FragmentActivity implements
 
         if (resultCode == RESULT_OK) {
             // add it to the Gallery
-
+            Log.i(TAG,"resultCode: " + resultCode);
             if (requestCode == CHOOSE_PHOTO_REQUEST || requestCode == CHOOSE_VIDEO_REQUEST) {
                 if (data == null) {
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
@@ -266,6 +266,11 @@ public class MainActivity extends FragmentActivity implements
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             mediaScanIntent.setData(mMediaUri);
             sendBroadcast(mediaScanIntent);
+
+            Intent recipientsIntent = new Intent(this,RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            startActivity(recipientsIntent);
+
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
