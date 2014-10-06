@@ -74,10 +74,13 @@ public class MainActivity extends FragmentActivity implements
                         videoIntent.putExtra(MediaStore.EXTRA_OUTPUT,mMediaUri);
                         videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
                         videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-                        startActivityForResult(videoIntent,TAKE_VIDEO_REQUEST);
+                        startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
                     }
                     break;
                 case 2://Choose an existing picture
+                    Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    choosePhotoIntent.setType("image/*");
+                    startActivityForResult(choosePhotoIntent,CHOOSE_PHOTO_REQUEST);
                     break;
                 case 3://Choose an existing video
                     break;
@@ -205,6 +208,32 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            // add it to the Gallery
+
+            if (requestCode == CHOOSE_PHOTO_REQUEST || requestCode == CHOOSE_VIDEO_REQUEST) {
+                if (data == null) {
+                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
+                }
+                else {
+                    //we are passing that Uri back using getData()
+                    mMediaUri = data.getData();
+                }
+            }
+
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(mMediaUri);
+            sendBroadcast(mediaScanIntent);
+        }
+        else if (resultCode != RESULT_CANCELED) {
+            Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -240,6 +269,8 @@ public class MainActivity extends FragmentActivity implements
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab,
