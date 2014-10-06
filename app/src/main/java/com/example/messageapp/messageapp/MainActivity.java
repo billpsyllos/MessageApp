@@ -66,6 +66,16 @@ public class MainActivity extends FragmentActivity implements
                     startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                     break;
                 case 1: //Take Video
+                    Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    mMediaUri = getOutPutMediaFileUri(MEDIA_TYPE_VIDEO);
+                    if (mMediaUri ==null){
+                        Toast.makeText(MainActivity.this, getString(R.string.error_external_storage), Toast.LENGTH_LONG).show();
+                    }else{
+                        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT,mMediaUri);
+                        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
+                        videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+                        startActivityForResult(videoIntent,TAKE_VIDEO_REQUEST);
+                    }
                     break;
                 case 2://Choose an existing picture
                     break;
