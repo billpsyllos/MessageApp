@@ -3,7 +3,10 @@ package com.example.messageapp.messageapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,10 +17,14 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +36,8 @@ public class RecipientsActivity extends ListActivity {
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
     protected MenuItem mSendMenuItem;
+    protected Uri mMediaUri;
+    protected String mFileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,9 @@ public class RecipientsActivity extends ListActivity {
         setContentView(R.layout.activity_recipients);
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        mMediaUri = getIntent().getData();
+        mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
 
     }
 
@@ -93,13 +105,49 @@ public class RecipientsActivity extends ListActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }else if(id == R.id.action_send){
-            return true;
+        switch (item.getItemId()){
+            case android.R.id.home :
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.action_send:
+                ParseObject message = createMessage();
+                //send(message);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private ParseObject createMessage() {
+        ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+        message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENTS_ID, getRecipientsId());
+        message.put(ParseConstants.KEY_FILE_TYPE,mFileType);
+
+        byte[] fileBytes = FileHelper.getByteArrayFromFile(this,mMediaUri);
+        if (fileBytes == null){
+            return null;
+        }else{
+            if(mFileType.equals(ParseConstants.TYPE_IMAGE)){
+                fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+            }
+
+            String fileName = FileHelper.getFileName(this,mMediaUri,mFileType);
+            ParseFile file = new ParseFile(fileName,fileBytes);
+            message.put(ParseConstants.KEY_FILE,file);
+            return message;
+        }
+
+    }
+
+    private ArrayList<String> getRecipientsId() {
+        ArrayList<String> recipientsIds = new ArrayList<String>();
+        for (int i = 0; i<getListView().getCount(); i++){
+            recipientsIds.add(mFriends.get(i).getObjectId());
+        }
+        return recipientsIds;
+
     }
 
     @Override
