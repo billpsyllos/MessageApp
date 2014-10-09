@@ -11,6 +11,9 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class ViewImageActivity extends Activity {
 
@@ -25,6 +28,16 @@ public class ViewImageActivity extends Activity {
         Uri imageUri = getIntent().getData();
         Log.i(TAG,"Image Uri ==== " + imageUri);
         Picasso.with(this).load(imageUri.toString()).into(imageView);
+
+        /*
+        Timer time = new Timer();
+        time.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 10*1000);
+        */
     }
 
 

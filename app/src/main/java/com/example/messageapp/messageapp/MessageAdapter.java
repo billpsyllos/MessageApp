@@ -40,6 +40,7 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageicon);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
             holder.dateLabel = (TextView)convertView.findViewById(R.id.dateView);
+            convertView.setTag(holder);
 
         }else{
             holder = (ViewHolder)convertView.getTag();
@@ -64,4 +65,11 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
         TextView nameLabel;
         TextView dateLabel;
     }
+
+    public void refill(List<ParseObject> messages){
+        mMessages.clear();
+        mMessages.addAll(messages);
+        notifyDataSetChanged();
+    }
+
 }

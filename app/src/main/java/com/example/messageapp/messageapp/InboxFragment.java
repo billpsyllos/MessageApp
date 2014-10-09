@@ -2,6 +2,7 @@ package com.example.messageapp.messageapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.parse.ParseUser;
 import java.security.PublicKey;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,10 +73,14 @@ public class InboxFragment extends ListFragment {
                         //Log.i(TAG, date[i]);
                         i++;
                     }
-                    MessageAdapter adapter = new MessageAdapter(getListView().getContext(),mMessages);
+                    if(getListView().getAdapter() == null) {
+                        MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
 
-                    setListAdapter(adapter);
-
+                        setListAdapter(adapter);
+                    }else{
+                        //refill
+                        ((MessageAdapter)getListView().getAdapter()).refill(mMessages);
+                    }
                 }
             }
         });
@@ -102,5 +108,27 @@ public class InboxFragment extends ListFragment {
             intent.setDataAndType(fileUri, "video/*");
             startActivity(intent);
         }
+
+        //Delete it!
+        /*
+        List <String> ids = message.getList(ParseConstants.KEY_RECIPIENTS_ID);
+
+        if(ids.size() == 1){
+            //last recipient - delete
+            message.deleteInBackground();
+        }else{
+            ids.remove(ParseUser.getCurrentUser().getObjectId());
+
+            ArrayList<String> idsToremove = new ArrayList<String>();
+            idsToremove.add(ParseUser.getCurrentUser().getObjectId());
+            message.removeAll(ParseConstants.KEY_RECIPIENTS_ID,idsToremove);
+            message.saveInBackground();
+
+        }
+        */
+
+
+
+
     }
 }
