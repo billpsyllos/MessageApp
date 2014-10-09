@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -29,7 +30,7 @@ public class EditFriendsActivity extends ListActivity {
     protected List<ParseUser> mUsers ;
     protected ParseRelation <ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
-
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +47,11 @@ public class EditFriendsActivity extends ListActivity {
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
+
         setProgressBarIndeterminateVisibility(true);
 
         ParseQuery <ParseUser> query = ParseUser.getQuery();
+        query.whereNotEqualTo(ParseConstants.KEY_OBJECT_ID, ParseUser.getCurrentUser().getObjectId());
         query.orderByAscending(ParseConstants.KEY_USERNAME);
         query.setLimit(1000);
         query.findInBackground(new FindCallback<ParseUser>() {
