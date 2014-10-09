@@ -47,5 +47,6 @@
     <string name="success_message">Message sent!</string>
     <string name="error_sending_message">There was an error sending your message.Please try again</string>
     <string name="title_activity_view_image">MessageApp</string>
+    <string name="menu_add_friends_label">add friends</string>
 
 </resources>

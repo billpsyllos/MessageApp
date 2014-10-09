@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,18 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.security.PublicKey;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by billaros on 30/9/2014.
  */
 public class InboxFragment extends ListFragment {
+
+    public static final String TAG = InboxFragment.class.getSimpleName();
 
     protected List<ParseObject> mMessages;
 
@@ -53,9 +60,15 @@ public class InboxFragment extends ListFragment {
                     mMessages = messages;
 
                     String[] usernames = new String[mMessages.size()];
+
+                    //Date[] date = new Date[mMessages.size()];
                     int i = 0;
                     for (ParseObject message : mMessages) {
                         usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
+                        //date[i] = (Date) message.get(ParseConstants.KEY_CREATED_AT);
+                        //String s = dates[i].format(dates);
+
+                        //Log.i(TAG, date[i]);
                         i++;
                     }
                     MessageAdapter adapter = new MessageAdapter(getListView().getContext(),mMessages);
@@ -86,7 +99,7 @@ public class InboxFragment extends ListFragment {
         }else{
             //View video
             Intent intent = new Intent(Intent.ACTION_VIEW,fileUri);
-            intent.setDataAndType(fileUri, "video/*" );
+            intent.setDataAndType(fileUri, "video/*");
             startActivity(intent);
         }
     }

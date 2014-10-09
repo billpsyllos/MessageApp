@@ -322,6 +322,9 @@ public class MainActivity extends FragmentActivity implements
                 builder.setItems(R.array.camera_choices, mDialogListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            case R.id.action_add_friends:
+                Intent EditFrinedsintent = new Intent(this,EditFriendsActivity.class);
+                startActivity(EditFrinedsintent);
         }
 
 
