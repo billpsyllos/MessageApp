@@ -12,10 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -39,7 +39,7 @@ public class RecipientsActivity extends ListActivity {
     protected MenuItem mSendMenuItem;
     protected Uri mMediaUri;
     protected String mFileType;
-
+    protected EditText mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,8 @@ public class RecipientsActivity extends ListActivity {
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+        mDescription = (EditText) findViewById(R.id.descriptionImageText);
+
 
     }
 
@@ -168,6 +170,7 @@ public class RecipientsActivity extends ListActivity {
         message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
         message.put(ParseConstants.KEY_RECIPIENTS_ID, getRecipientsId());
         message.put(ParseConstants.KEY_FILE_TYPE,mFileType);
+        message.put(ParseConstants.KEY_DESCRIPTION,mDescription.getText().toString());
 
 
 

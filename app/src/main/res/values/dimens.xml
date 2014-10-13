@@ -3,4 +3,13 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name ="image_padding">10dp</dimen>
+    <dimen name="descriptionLabel_text_size">12dp</dimen>
+    <dimen name="discriptionLabel_padding_left">24dp</dimen>
+    <dimen name="senderLabel_padding_top">14dp</dimen>
+    <dimen name="senderLabel_padding_left">8dp</dimen>
+    <dimen name="senderLabel_padding_bottom">12dp</dimen>
+    <dimen name="messageIcon_padding_left">12dp</dimen>
+    <dimen name="messageIcon_padding_top">12dp</dimen>
+    <dimen name="messageIcon_padding_bottom">12dp</dimen>
+    <dimen name="descriptionLabel_padding_bottom">10dp</dimen>
 </resources>

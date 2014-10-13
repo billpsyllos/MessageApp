@@ -62,15 +62,11 @@ public class InboxFragment extends ListFragment {
                     mMessages = messages;
 
                     String[] usernames = new String[mMessages.size()];
-
-                    //Date[] date = new Date[mMessages.size()];
+                    String[] descriptions = new String[mMessages.size()];
                     int i = 0;
                     for (ParseObject message : mMessages) {
                         usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
-                        //date[i] = (Date) message.get(ParseConstants.KEY_CREATED_AT);
-                        //String s = dates[i].format(dates);
-
-                        //Log.i(TAG, date[i]);
+                        descriptions[i] = message.getString(ParseConstants.KEY_DESCRIPTION);
                         i++;
                     }
                     if(getListView().getAdapter() == null) {

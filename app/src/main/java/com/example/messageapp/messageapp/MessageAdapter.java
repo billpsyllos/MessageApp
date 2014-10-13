@@ -39,7 +39,8 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
             holder = new ViewHolder();
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageicon);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
-            holder.dateLabel = (TextView)convertView.findViewById(R.id.dateView);
+            holder.descriptionLabel = (TextView) convertView.findViewById(R.id.descriptionLabel);
+
             convertView.setTag(holder);
 
         }else{
@@ -51,19 +52,22 @@ public class MessageAdapter extends ArrayAdapter<ParseObject> {
         if(message.getString(ParseConstants.KEY_FILE_TYPE).equals(ParseConstants.TYPE_IMAGE)) {
 
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
+
         }else{
             holder.iconImageView.setImageResource(R.drawable.ic_action_play_over_video);
         }
 
-            holder.nameLabel.setText(message.getString(ParseConstants.KEY_SENDER_NAME));
-            holder.dateLabel.setText(message.getString(ParseConstants.KEY_CREATED_AT));
+        holder.nameLabel.setText(message.getString(ParseConstants.KEY_SENDER_NAME));
+        holder.descriptionLabel.setText(message.getString(ParseConstants.KEY_DESCRIPTION));
+
         return convertView;
     }
 
     private static class ViewHolder{
         ImageView iconImageView;
         TextView nameLabel;
-        TextView dateLabel;
+        TextView descriptionLabel;
+
     }
 
     public void refill(List<ParseObject> messages){

@@ -10,9 +10,9 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/messageIcon_padding_left"
+        android:paddingTop="@dimen/messageIcon_padding_top"
+        android:paddingBottom="@dimen/messageIcon_padding_bottom"
         android:src="@drawable/ic_action_picture"/>
 
     <TextView
@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/senderLabel"
-        android:paddingLeft="8dp"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/senderLabel_padding_left"
+        android:paddingTop="@dimen/senderLabel_padding_top"
+        android:paddingBottom="@dimen/senderLabel_padding_bottom"
         android:layout_alignBottom="@+id/messageicon"
         android:layout_toRightOf="@+id/messageicon"
         android:layout_toEndOf="@+id/messageicon" />
@@ -30,13 +30,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/dateView"
-        android:paddingLeft="8dp"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:layout_alignBottom="@+id/messageicon"
-        android:layout_toRightOf="@+id/messageicon"
-        android:layout_toEndOf="@+id/messageicon"
-        />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/descriptionLabel"
+        android:layout_below="@+id/messageicon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/descriptionLabel_text_size"
+        android:paddingLeft="@dimen/discriptionLabel_padding_left"
+        android:paddingBottom="@dimen/descriptionLabel_padding_bottom"/>
+
+
 </RelativeLayout>
