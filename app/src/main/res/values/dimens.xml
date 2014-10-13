@@ -12,4 +12,6 @@
     <dimen name="messageIcon_padding_top">12dp</dimen>
     <dimen name="messageIcon_padding_bottom">12dp</dimen>
     <dimen name="descriptionLabel_padding_bottom">10dp</dimen>
+    <dimen name="senderDescriptionView_text_size">14dp</dimen>
+    <dimen name="senderDescriptionView_padding_left">20dp</dimen>
 </resources>

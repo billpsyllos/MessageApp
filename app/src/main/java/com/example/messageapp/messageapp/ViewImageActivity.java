@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +25,17 @@ public class ViewImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
+        TextView descriptionView = (TextView) findViewById(R.id.senderDescriptionView);
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
+
         Uri imageUri = getIntent().getData();
         Log.i(TAG,"Image Uri ==== " + imageUri);
         Picasso.with(this).load(imageUri.toString()).into(imageView);
+
+        String descriptionText = getIntent().getExtras().getString(ParseConstants.KEY_DESCRIPTION);
+        Log.i(TAG, descriptionText);
+        descriptionView.setText(descriptionText);
+
 
         /*
         Timer time = new Timer();
