@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 
 import com.parse.FindCallback;
@@ -69,8 +70,14 @@ public class EditFriendsActivity extends ListActivity {
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditFriendsActivity.this ,
                             android.R.layout.simple_list_item_checked,usernames);
-                    setListAdapter(adapter);
+                    //setListAdapter(adapter);
 
+
+                    AutoCompleteTextView textView = (AutoCompleteTextView)
+                            findViewById(R.id.myautocomplete);
+                    textView.setAdapter(adapter);
+
+                    setListAdapter(adapter);
                     addFriendsCheckMarks();
 
                 }else{
@@ -131,6 +138,7 @@ public class EditFriendsActivity extends ListActivity {
                            //use equals to compare string in java
                            if (friend.getObjectId().equals(user.getObjectId())){
                                 getListView().setItemChecked(i, true);
+
                            }
                        }
                     }
