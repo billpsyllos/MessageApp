@@ -3,7 +3,6 @@ package com.example.messageapp.messageapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,7 +25,6 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class RecipientsActivity extends ListActivity {
     protected MenuItem mSendMenuItem;
     protected Uri mMediaUri;
     protected String mFileType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,9 @@ public class RecipientsActivity extends ListActivity {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
                             android.R.layout.simple_list_item_checked, usernames);
                     setListAdapter(adapter);
+
+
+
                 }else{
                     Log.e(TAG, e.getMessage());
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
@@ -90,6 +93,12 @@ public class RecipientsActivity extends ListActivity {
                 }
             }
         });
+
+        //display image before send
+         ImageView imgView = (ImageView) findViewById(R.id.imageView);
+         imgView.setImageURI(Uri.parse(String.valueOf(mMediaUri)));
+
+
 
     }
 

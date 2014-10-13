@@ -49,5 +49,6 @@
     <string name="title_activity_view_image">MessageApp</string>
     <string name="menu_add_friends_label">add friends</string>
     <string name="autocomplete_search_friends_label">Search friends</string>
+    <string name="description_label">Add a description</string>
 
 </resources>
