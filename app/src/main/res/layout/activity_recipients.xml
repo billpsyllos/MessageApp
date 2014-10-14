@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.messageapp.messageapp.RecipientsActivity">
 
+
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
