@@ -29,7 +29,7 @@ public class FriendsFragment extends ListFragment {
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
-    protected String[] objectIds ;
+    protected String[] senderObjectId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,11 +57,11 @@ public class FriendsFragment extends ListFragment {
                 if ( e == null) {
                     mFriends = friends;
                     String[] usernames = new String[mFriends.size()];
-                    objectIds = new String[mFriends.size()];
+                    senderObjectId = new String[mFriends.size()];
                     int i = 0;
                     for (ParseUser user : mFriends) {
                         usernames[i] = user.getUsername();
-                        objectIds[i] = user.getObjectId();
+                        senderObjectId[i] = user.getObjectId();
                         i++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
@@ -85,9 +85,9 @@ public class FriendsFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Log.i(TAG,objectIds[position]);
+        Log.i(TAG, senderObjectId[position]);
         Intent friendsIntent = new Intent(getActivity(),FriendMessagesActivity.class);
-        friendsIntent.putExtra(ParseConstants.KEY_OBJECT_ID,objectIds[position]);
+        friendsIntent.putExtra(ParseConstants.KEY_SENDER_ID, senderObjectId[position]);
         startActivity(friendsIntent);
     }
 }

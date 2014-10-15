@@ -30,7 +30,8 @@ public class ViewImageActivity extends Activity {
 
         Uri imageUri = getIntent().getData();
         Log.i(TAG,"Image Uri ==== " + imageUri);
-        Picasso.with(this).load(imageUri.toString()).into(imageView);
+        Picasso.with(this).load(imageUri.toString()).resize(50, 50)
+                .into(imageView);
 
         String descriptionText = getIntent().getExtras().getString(ParseConstants.KEY_DESCRIPTION);
         Log.i(TAG, descriptionText);

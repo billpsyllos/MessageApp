@@ -43,12 +43,13 @@ public class FriendMessagesActivity extends ListActivity {
 
 
 
-        String objectId = getIntent().getExtras().getString(ParseConstants.KEY_OBJECT_ID);
-        Log.i(TAG, objectId);
+        String senderObjectId = getIntent().getExtras().getString(ParseConstants.KEY_SENDER_ID);
+        Log.i(TAG, "SenderID ===> " + senderObjectId );
 
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_MESSAGES);
-        query.whereEqualTo(ParseConstants.KEY_SENDER_ID, objectId);
+        query.whereEqualTo(ParseConstants.KEY_SENDER_ID, senderObjectId);
+        query.whereEqualTo(ParseConstants.KEY_RECIPIENTS_ID,ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
