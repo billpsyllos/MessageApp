@@ -1,6 +1,7 @@
 package com.example.messageapp.messageapp;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class FriendsFragment extends ListFragment {
     protected List<ParseUser> mFriends;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
+    protected String[] objectIds ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,9 +57,11 @@ public class FriendsFragment extends ListFragment {
                 if ( e == null) {
                     mFriends = friends;
                     String[] usernames = new String[mFriends.size()];
+                    objectIds = new String[mFriends.size()];
                     int i = 0;
                     for (ParseUser user : mFriends) {
                         usernames[i] = user.getUsername();
+                        objectIds[i] = user.getObjectId();
                         i++;
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(),
@@ -80,5 +84,10 @@ public class FriendsFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        Log.i(TAG,objectIds[position]);
+        Intent friendsIntent = new Intent(getActivity(),FriendMessagesActivity.class);
+        friendsIntent.putExtra(ParseConstants.KEY_OBJECT_ID,objectIds[position]);
+        startActivity(friendsIntent);
     }
 }

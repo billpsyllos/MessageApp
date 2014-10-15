@@ -50,5 +50,7 @@
     <string name="menu_add_friends_label">add friends</string>
     <string name="autocomplete_search_friends_label">Search friends</string>
     <string name="description_label">Add a description</string>
+    <string name="title_activity_friends_messages">FriendsMessagesActivity</string>
+    <string name="title_activity_friend_messages">FriendMessagesActivity</string>
 
 </resources>
