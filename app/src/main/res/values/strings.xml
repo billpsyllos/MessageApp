@@ -52,5 +52,8 @@
     <string name="description_label">Add a description</string>
     <string name="title_activity_friends_messages">FriendsMessagesActivity</string>
     <string name="title_activity_friend_messages">FriendMessagesActivity</string>
+    <string name="menu_location_enable">location enable</string>
+    <string name="gps_not_found_title">GPS not found</string>
+    <string name="gps_not_found_message">Please enable location services</string>
 
 </resources>

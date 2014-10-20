@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -12,8 +13,12 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -40,6 +45,7 @@ import com.example.messageapp.messageapp.SectionsPagerAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -228,6 +234,8 @@ public class MainActivity extends FragmentActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
+
         if (resultCode == RESULT_OK) {
             // add it to the Gallery
             Log.i(TAG,"resultCode: " + resultCode);
@@ -329,6 +337,28 @@ public class MainActivity extends FragmentActivity implements
                 Intent EditFrinedsintent = new Intent(this,EditFriendsActivity.class);
                 startActivity(EditFrinedsintent);
                 break;
+            case R.id.action_location_enable:
+
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                if( !lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                    AlertDialog.Builder locationBuilder = new AlertDialog.Builder(this);
+                    locationBuilder.setTitle(getString(R.string.gps_not_found_title));  // GPS not found
+                    locationBuilder.setMessage(getString(R.string.gps_not_found_message)); // Want to enable?
+                    /*builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });*/
+                    locationBuilder.setNegativeButton(R.string.accept, null);
+                    locationBuilder.create().show();
+
+                }else{
+                    int gpsCount = 30*60*1000; //half hour
+                    LocationListener ll = new myLocationListener();
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);
+                }
+
+                break;
         }
 
 
@@ -356,5 +386,41 @@ public class MainActivity extends FragmentActivity implements
     }
 
 
+    private class myLocationListener implements LocationListener {
 
+
+        @Override
+        public void onLocationChanged(Location location) {
+            if(location !=null){
+                double pLong = location.getLongitude();
+                double pLat = location.getLatitude();
+                ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
+                ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
+                locationObject.put(ParseConstants.KEY_USERNAME, ParseUser.getCurrentUser().getUsername());
+                locationObject.put(ParseConstants.KEY_USER_ID, ParseUser.getCurrentUser().getObjectId());
+                locationObject.put(ParseConstants.KEY_COORDINATES, point);
+                try {
+                    locationObject.save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "Current Long == " + pLong + " " + "Lat == " + pLat);
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    }
 }
