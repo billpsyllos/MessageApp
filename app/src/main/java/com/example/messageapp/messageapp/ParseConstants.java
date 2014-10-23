@@ -21,7 +21,7 @@ public final class ParseConstants {
     public static final String KEY_DESCRIPTION = "description";
     public static final String CLASS_POSTS = "Posts";
     public static final String KEY_POSTS_TEXT = "Text";
-    public static final String KEY_POSTS_CREATED_BY = "User";
+    public static final String KEY_POSTS_CREATED_BY = "CreatedBy";
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
 }

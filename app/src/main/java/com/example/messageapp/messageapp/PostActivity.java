@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -53,11 +54,19 @@ public class PostActivity extends Activity {
                 ParseObject posts = new ParseObject(ParseConstants.CLASS_POSTS);
                 posts.put(ParseConstants.KEY_POSTS_TEXT,postEditText.getText().toString());
                 posts.put(ParseConstants.KEY_POSTS_CREATED_BY,ParseUser.getCurrentUser());
-                try {
-                    posts.save();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                posts.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null){
+                            //success
+                            Toast.makeText(PostActivity.this, getString(R.string.success_message_create), Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(PostActivity.this,MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         });
 
