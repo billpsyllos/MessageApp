@@ -55,5 +55,15 @@
     <string name="menu_location_enable">location enable</string>
     <string name="gps_not_found_title">GPS not found</string>
     <string name="gps_not_found_message">Please enable location services</string>
+    <string name="title_activity_posts_locations">PostsLocationsActivity</string>
+    <string name="title_activity_demo">demoActivity</string>
+    <string name="title_activity_post">PostActivity</string>
+    <string name="prompt_post">Create a post</string>
+    <string name="post">Post</string>
+    <string name="character_count_placeholder">0/140</string>
+    <string name="progress_post"><![CDATA[Posting&#8230]]></string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_section3">Posts</string>
+    <string name="empty_posts">No new posts</string>
 
 </resources>

@@ -30,6 +30,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return new InboxFragment();
             case 1:
                 return new FriendsFragment();
+            case 2:
+                return new PostsFragment();
 
         }
 
@@ -38,7 +40,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 2;
+		return 3;
 	}
 
 	@Override
@@ -49,6 +51,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			return mContext.getString(R.string.title_section1).toUpperCase(l);
 		case 1:
 			return mContext.getString(R.string.title_section2).toUpperCase(l);
+        case 2:
+            return mContext.getString(R.string.title_section3).toUpperCase(l);
 		}
 		return null;
 	}
