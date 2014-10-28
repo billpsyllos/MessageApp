@@ -1,12 +1,5 @@
 package com.example.messageapp.messageapp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -28,11 +21,22 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity implements
         ActionBar.TabListener {
@@ -47,7 +51,9 @@ public class MainActivity extends FragmentActivity implements
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
     public static final int FILE_SIZE_LIMIT = 1024*1024*10; //10MB
-
+    protected List<ParseObject> mLocations;
+    protected double pLong;
+    protected double pLat;
 
     protected Uri mMediaUri ;
 
@@ -167,6 +173,11 @@ public class MainActivity extends FragmentActivity implements
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
+
+
+
+
+
         ParseAnalytics.trackAppOpened(getIntent());
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -212,6 +223,7 @@ public class MainActivity extends FragmentActivity implements
                     .setTabListener(this));
         }
     }
+
 
 
     @Override
@@ -288,6 +300,12 @@ public class MainActivity extends FragmentActivity implements
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+    private void navigateToMap(){
+        Intent mapIntent = new Intent(this,MapActivity.class);
+        mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mapIntent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -316,14 +334,29 @@ public class MainActivity extends FragmentActivity implements
                 dialog.show();
                 break;
             case R.id.action_add_friends:
-                Intent EditFrinedsintent = new Intent(this,EditFriendsActivity.class);
-                startActivity(EditFrinedsintent);
+                Intent editFrinedsIntent = new Intent(this,EditFriendsActivity.class);
+                startActivity(editFrinedsIntent);
                 break;
             case R.id.action_location_enable:
-                Intent postsIntent = new Intent(this,PostActivity.class);
-                startActivity(postsIntent);
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                if( !lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                    AlertDialog.Builder locationBuilder = new AlertDialog.Builder(this);
+                    locationBuilder.setTitle(getString(R.string.gps_not_found_title)); // GPS not found
+                    locationBuilder.setMessage(getString(R.string.gps_not_found_message)); // Want to enable?
+                     /*builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        + public void onClick(DialogInterface dialogInterface, int i) {
+                        + startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        + }
+                        + });*/
+                    locationBuilder.setNegativeButton(R.string.accept, null);
+                    locationBuilder.create().show();
 
-                break;
+                }else{
+                    int gpsCount = 30*60*1000; //half hour
+                    LocationListener ll = new myLocationListener();
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);
+                }
+
         }
 
 
@@ -349,6 +382,89 @@ public class MainActivity extends FragmentActivity implements
     public void onTabReselected(ActionBar.Tab tab,
                                 FragmentTransaction fragmentTransaction) {
     }
+
+    private class myLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(final Location location) {
+            if(location !=null){
+                final double pLong = location.getLongitude();
+                final double pLat = location.getLatitude();
+                final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
+
+                Log.i(TAG, "Current Long == " + pLong + " " + "Lat == " + pLat);
+
+                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
+                query.include(ParseConstants.KEY_USER);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> locations, ParseException ee) {
+                        mLocations = locations;
+                        String[] usernames = new String[mLocations.size()];
+                        String[] objectId = new String[mLocations.size()];
+                        int i = 0;
+                        if(locations.size() == 0){
+
+                            ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
+                            locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
+                            locationObject.put(ParseConstants.KEY_COORDINATES, point);
+                            try {
+                                locationObject.save();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Log.i(TAG,"Insert Success");
+                        }
+                        for (ParseObject location : mLocations){
+                            usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
+                            objectId[i] = location.getObjectId();
+                            if (usernames[i].equals(ParseUser.getCurrentUser().getUsername())){
+
+                                //if exist make update
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
+                                // Retrieve the object by id
+                                query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
+                                    public void done(ParseObject update, ParseException e) {
+                                        if (e == null) {
+                                            // Now let's update it with some new data. In this case, only cheatMode and score
+                                            // will get sent to the Parse Cloud. playerName hasn't changed.
+                                            update.put(ParseConstants.KEY_COORDINATES, point);
+                                            update.saveInBackground();
+                                            Log.i(TAG, "Update success");
+                                        }
+                                    }
+                                });
+                                Log.i(TAG,"Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
+                                navigateToMap();
+                            }else if (usernames[i] != ParseUser.getCurrentUser().getUsername()){
+
+                                //insert
+                                Log.i(TAG,"Insert Success");
+                                ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
+                                locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
+                                locationObject.put(ParseConstants.KEY_COORDINATES, point);
+                                try {
+                                    locationObject.save();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                navigateToMap();
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+        }
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+        @Override
+        public void onProviderDisabled(String s) {
+        }
+    }
+
 
 
 

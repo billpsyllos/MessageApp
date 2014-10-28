@@ -1,8 +1,13 @@
 package com.example.messageapp.messageapp;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentSender;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -10,26 +15,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.Marker;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
-import com.parse.ParseUser;
+import com.parse.ParseQueryAdapter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by billaros on 30/9/2014.
  */
-public class PostsFragment extends ListFragment {
+public class PostsFragment extends ListFragment implements LocationListener,
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener
+       {
 
     public static final String TAG = PostsFragment.class.getSimpleName();
 
     protected   List<ParseObject> mPosts;
-
 
 
     @Override
@@ -39,6 +57,8 @@ public class PostsFragment extends ListFragment {
                 container, false);
 
         return rootView;
+
+
     }
 
     @Override
@@ -65,7 +85,6 @@ public class PostsFragment extends ListFragment {
                         i++;
                         PostsAdapter postsAdapter = new PostsAdapter(getListView().getContext(), mPosts);
                         setListAdapter(postsAdapter);
-                       // Log.i(TAG, usernames[i].toString());
                     }
                 }
             }
@@ -79,27 +98,44 @@ public class PostsFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
 
+    }
 
-        //Delete it!
-        /*
-        List <String> ids = message.getList(ParseConstants.KEY_RECIPIENTS_ID);
-
-        if(ids.size() == 1){
-            //last recipient - delete
-            message.deleteInBackground();
-        }else{
-            ids.remove(ParseUser.getCurrentUser().getObjectId());
-
-            ArrayList<String> idsToremove = new ArrayList<String>();
-            idsToremove.add(ParseUser.getCurrentUser().getObjectId());
-            message.removeAll(ParseConstants.KEY_RECIPIENTS_ID,idsToremove);
-            message.saveInBackground();
-
-        }
-        */
-
-
-
+    @Override
+    public void onConnected(Bundle bundle) {
+        // Display the connection status
+        //Toast.makeText(InboxFragment.this, getString(R.string.success_message_create), Toast.LENGTH_LONG).show();
 
     }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
 }

@@ -43,6 +43,10 @@ public class PostActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
+        Intent intent = getIntent();
+        Location location = intent.getParcelableExtra("location");
+        geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+
         postEditText = (EditText) findViewById(R.id.post_edit_text);
 
         characterCountTextView = (TextView) findViewById(R.id.character_count_textview);
@@ -54,6 +58,7 @@ public class PostActivity extends Activity {
                 ParseObject posts = new ParseObject(ParseConstants.CLASS_POSTS);
                 posts.put(ParseConstants.KEY_POSTS_TEXT,postEditText.getText().toString());
                 posts.put(ParseConstants.KEY_POSTS_CREATED_BY,ParseUser.getCurrentUser());
+                posts.put("location" , geoPoint);
                 posts.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
