@@ -386,7 +386,7 @@ public class MainActivity extends FragmentActivity implements
     private class myLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(final Location location) {
-            if(location !=null){
+            if (location != null) {
                 final double pLong = location.getLongitude();
                 final double pLat = location.getLatitude();
                 final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
@@ -395,6 +395,7 @@ public class MainActivity extends FragmentActivity implements
 
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
                 query.include(ParseConstants.KEY_USER);
+                query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
                 query.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> locations, ParseException ee) {
@@ -402,8 +403,7 @@ public class MainActivity extends FragmentActivity implements
                         String[] usernames = new String[mLocations.size()];
                         String[] objectId = new String[mLocations.size()];
                         int i = 0;
-                        if(locations.size() == 0){
-
+                        if (locations.size() == 0) {
                             ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
                             locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
                             locationObject.put(ParseConstants.KEY_COORDINATES, point);
@@ -412,12 +412,12 @@ public class MainActivity extends FragmentActivity implements
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            Log.i(TAG,"Insert Success");
-                        }
-                        for (ParseObject location : mLocations){
-                            usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
-                            objectId[i] = location.getObjectId();
-                            if (usernames[i].equals(ParseUser.getCurrentUser().getUsername())){
+                            Log.i(TAG, "Insert Success");
+                            navigateToMap();
+                        }else if (locations.size() == 1) {
+                            for (ParseObject location : mLocations) {
+                                usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
+                                objectId[i] = location.getObjectId();
 
                                 //if exist make update
                                 ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
@@ -433,22 +433,9 @@ public class MainActivity extends FragmentActivity implements
                                         }
                                     }
                                 });
-                                Log.i(TAG,"Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
-                                navigateToMap();
-                            }else if (usernames[i] != ParseUser.getCurrentUser().getUsername()){
-
-                                //insert
-                                Log.i(TAG,"Insert Success");
-                                ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
-                                locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
-                                locationObject.put(ParseConstants.KEY_COORDINATES, point);
-                                try {
-                                    locationObject.save();
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                navigateToMap();
                             }
+                            Log.i(TAG, "Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
+                            navigateToMap();
                         }
                     }
                 });
