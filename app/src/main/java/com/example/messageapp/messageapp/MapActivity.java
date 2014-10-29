@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,18 +51,23 @@ public class MapActivity extends Activity {
                 int i = 0;
                 ParseGeoPoint[] coordinats = new ParseGeoPoint[mLocations.size()];
                 String[] usernames = new String[mLocations.size()];
+                Date[] dates = new Date[mLocations.size()];
+                long now = new Date().getTime();
                 for (ParseObject location : mLocations){
                     usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
                     coordinats[i] = location.getParseGeoPoint(ParseConstants.KEY_COORDINATES);
+                    dates[i] = location.getUpdatedAt();
+                    String convertedDate = DateUtils.getRelativeTimeSpanString(dates[i].getTime(),now,DateUtils.SECOND_IN_MILLIS).toString();
                     double longitude = coordinats[i].getLongitude();
                     double latitude = coordinats[i].getLatitude();
                     LatLng position = new LatLng(longitude, latitude);
                     Marker marker = mMap.addMarker(new MarkerOptions().position(position)
-                            .title(usernames[i] + " was here"));
+                            .title(usernames[i] + " was here " + convertedDate));
                     i++;
                 }
             }
         });
+
 
     }
 
