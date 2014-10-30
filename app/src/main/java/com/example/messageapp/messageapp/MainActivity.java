@@ -33,11 +33,10 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.parse.twitter.Twitter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -187,9 +186,16 @@ public class MainActivity extends FragmentActivity implements
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
         if (session != null && session.isOpened()) {
-            makeMeRequest();
+            facebookMakeMeRequest();
             Log.d(TAG,"Facebook user logged in");
         }
+
+        // Fetch twitter user info
+        if (ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())) {
+            twitterMakeRequest();
+        }
+
+
 
 
 
@@ -328,7 +334,7 @@ public class MainActivity extends FragmentActivity implements
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    private void makeMeRequest() {
+    private void facebookMakeMeRequest() {
         Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
                 new Request.GraphUserCallback() {
                     @Override
@@ -356,6 +362,23 @@ public class MainActivity extends FragmentActivity implements
         request.executeAsync();
 
     }
+    private void twitterMakeRequest() {
+
+        ParseUser mUser = ParseUser.getCurrentUser();
+        mUser.put(ParseConstants.KEY_USERNAME, ParseTwitterUtils.getTwitter().getScreenName());
+        mUser.saveInBackground(new SaveCallback() {
+            public void done(com.parse.ParseException e) {
+                // TODO Auto-generated method stub
+                if (e == null) {
+                    Log.d(TAG,"Twitter Username updated successfully");
+                } else {
+                    Log.d(TAG,"Error");
+                }
+            }
+        });
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

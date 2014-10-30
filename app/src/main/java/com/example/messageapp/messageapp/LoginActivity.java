@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -40,6 +41,7 @@ public class LoginActivity extends Activity {
     protected Button mLoginButton;
     protected Button mSignUpButton;
     protected Button mFacebookButton;
+    protected Button mTwitterButton;
 
 
     @Override
@@ -50,7 +52,7 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         // Add code to print out the key hash
-        try {
+        /*try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.example.messageapp.messageapp",
                     PackageManager.GET_SIGNATURES);
@@ -63,10 +65,32 @@ public class LoginActivity extends Activity {
 
         } catch (NoSuchAlgorithmException e) {
 
-        }
+        }*/
 
         ActionBar actionBar = getActionBar();
         actionBar.hide();
+
+        mTwitterButton = (Button)findViewById(R.id.twitterButton);
+        mTwitterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseTwitterUtils.logIn(LoginActivity.this, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException err) {
+                        if (user == null) {
+                            Log.d("MyApp", "Uh oh. The user cancelled the Twitter login.");
+                        } else if (user.isNew()) {
+                            navigateToMain();
+                            Log.d("MyApp", "User signed up and logged in through Twitter!");
+                        } else {
+                            navigateToMain();
+                            Log.d("MyApp", "User logged in through Twitter!");
+                        }
+                    }
+                });
+
+            }
+        });
 
         final List<String> permissions = Arrays.asList("public_profile", "user_friends", "user_about_me",
                 "user_relationships", "user_birthday", "user_location");
@@ -79,22 +103,13 @@ public class LoginActivity extends Activity {
                     public void done(ParseUser user, ParseException err) {
                         if (user == null) {
                             Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+
                         } else if (user.isNew()) {
                             Log.d("MyApp", "User signed up and logged in through Facebook!");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            navigateToMain();
                         } else {
                             Log.d("MyApp", "User logged in through Facebook!");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            navigateToMain();
 
                         }
                     }
@@ -146,10 +161,7 @@ public class LoginActivity extends Activity {
                             setProgressBarIndeterminateVisibility(false);
                             if ( e == null){
                                 //Success!
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                                navigateToMain();
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage(e.getMessage() )
@@ -190,6 +202,13 @@ public class LoginActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void navigateToMain(){
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 

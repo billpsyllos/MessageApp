@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseTwitterUtils;
 
 
 /**
@@ -27,6 +28,7 @@ public class MessageApplication extends Application {
         super.onCreate();
         Parse.initialize(this, "wdfoNc9o8Me7cPD0xtHEfkZH41mbHIXflPxeaY0h", "mM3kS9oOqplrGM7WwX0tWyfpp71hRcHoq2Am0S8d");
         ParseFacebookUtils.initialize("662012717251702");
+        ParseTwitterUtils.initialize("WEG8zu3hpG0qLn0JkYDJ4nlBZ", "lh6vM4Rq6UR6BTi4LED6X0kSDIlyaWI9EjhT4ukDbepsI00xfQ");
 
 
     }
