@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class PostsFragment extends ListFragment implements LocationListener,
     public static final String TAG = PostsFragment.class.getSimpleName();
 
     protected   List<ParseObject> mPosts;
+    protected Button mPostButton;
 
 
     @Override
@@ -56,7 +58,11 @@ public class PostsFragment extends ListFragment implements LocationListener,
         View rootView = inflater.inflate(R.layout.fragment_posts,
                 container, false);
 
+
+
         return rootView;
+
+
 
 
     }
@@ -65,6 +71,17 @@ public class PostsFragment extends ListFragment implements LocationListener,
     public void onResume(){
         super.onResume();
         getActivity().setProgressBarIndeterminateVisibility(true);
+
+        mPostButton = (Button)getView().findViewById(R.id.post_button);
+        mPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addPostIntent = new Intent(getActivity(),PostActivity.class);
+                addPostIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                addPostIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(addPostIntent);
+            }
+        });
 
         //ParseObject obj = ParseObject.createWithoutData("Posts","User");
         ParseQuery<ParseObject> gameQuery = ParseQuery.getQuery(ParseConstants.CLASS_POSTS);

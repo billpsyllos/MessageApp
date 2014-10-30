@@ -43,10 +43,10 @@ public class PostActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        Intent intent = getIntent();
+    /*    Intent intent = getIntent();
         Location location = intent.getParcelableExtra("location");
         geoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-
+    */
         postEditText = (EditText) findViewById(R.id.post_edit_text);
 
         characterCountTextView = (TextView) findViewById(R.id.character_count_textview);
