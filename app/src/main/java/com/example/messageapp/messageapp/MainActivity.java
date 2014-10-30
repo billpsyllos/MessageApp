@@ -21,14 +21,23 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +65,7 @@ public class MainActivity extends FragmentActivity implements
     protected double pLat;
 
     protected Uri mMediaUri ;
+    protected ParseUser mUser;
 
 
 
@@ -174,7 +184,12 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
 
 
-
+        // Fetch Facebook user info if the session is active
+        Session session = ParseFacebookUtils.getSession();
+        if (session != null && session.isOpened()) {
+            makeMeRequest();
+            Log.d(TAG,"Facebook user logged in");
+        }
 
 
 
@@ -312,6 +327,34 @@ public class MainActivity extends FragmentActivity implements
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+    private void makeMeRequest() {
+        Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+                new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                                //Parse jsonObject
+                                String firstName = user.getFirstName();
+                                ParseUser mUser = ParseUser.getCurrentUser();
+                                mUser.put(ParseConstants.KEY_USERNAME, firstName);
+                                mUser.saveInBackground(new SaveCallback() {
+                                    public void done(com.parse.ParseException e) {
+                                        // TODO Auto-generated method stub
+                                        if (e == null) {
+                                            Log.d(TAG,"Facebook Username updated successfully");
+                                        } else {
+                                            Log.d(TAG,"Error");
+                                        }
+                                    }
+                                });
+                        } else if (response.getError() != null) {
+                            // handle error
+                        }
+                    }
+                });
+        request.executeAsync();
+
     }
 
     @Override

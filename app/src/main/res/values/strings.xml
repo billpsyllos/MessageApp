@@ -67,5 +67,8 @@
     <string name="empty_posts">No new posts</string>
     <string name="success_message_create">Posts has been published</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="sign_up_hint_button">Create new account</string>
+    <string name="forgot_password_hint">Forgot Password</string>
+    <string name="title_facebook_login">Facebook Log in</string>
 
 </resources>

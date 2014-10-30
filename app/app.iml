@@ -82,11 +82,12 @@
     <orderEntry type="library" exported="" name="support-v13-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.3.4" level="project" />
     <orderEntry type="library" exported="" name="Parse-1.6.0" level="project" />
-    <orderEntry type="library" exported="" name="1_Parse-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-6.1.11" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
+    <orderEntry type="library" exported="" name="bolts-android-1.1.2" level="project" />
+    <orderEntry type="module" module-name="facebook" exported="" />
   </component>
 </module>
 
