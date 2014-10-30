@@ -14,7 +14,7 @@
     <string name="sign_up_hint">Sign Up</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="email_hint">Email</string>
-    <string name="sign_up_button_hint">Sign Up</string>
+    <string name="sign_up_button_hint">Create new account</string>
     <string name="sign_up_alertText">ERROR!! Please type again all inputs without whitespaces</string>
     <string name="login_alertText">ERROR!! Please type again all inputs without whitespaces</string>
     <string name="sign_up_error_title">Ooops!</string>
