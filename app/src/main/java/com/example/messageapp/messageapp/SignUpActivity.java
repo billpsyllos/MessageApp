@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -23,6 +24,7 @@ public class SignUpActivity extends Activity {
     protected EditText mPassword;
     protected EditText mEmail;
     protected Button mSignUpButton;
+    protected TextView mReturnToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,15 @@ public class SignUpActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.hide();
+
+        mReturnToLogin = (TextView) findViewById(R.id.returnToLogin);
+        mReturnToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent returnInten = new Intent(SignUpActivity.this,LoginActivity.class);
+                startActivity(returnInten);
+            }
+        });
 
         mUsername = (EditText) findViewById(R.id.usernameField);
         mPassword = (EditText) findViewById(R.id.passwordField);
