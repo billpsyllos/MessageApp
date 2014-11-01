@@ -4,10 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,19 +19,13 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class LoginActivity extends Activity {
 
-    protected TextView mSignUpTextView;
 
     protected EditText mUsername;
     protected EditText mPassword;
@@ -42,6 +33,7 @@ public class LoginActivity extends Activity {
     protected Button mSignUpButton;
     protected Button mFacebookButton;
     protected Button mTwitterButton;
+    protected TextView mRessetPasswordView;
 
 
     @Override
@@ -69,6 +61,17 @@ public class LoginActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.hide();
+
+        mRessetPasswordView = (TextView)findViewById(R.id.ressetPasswordView);
+        mRessetPasswordView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ressetIntent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(ressetIntent);
+            }
+        });
 
         mTwitterButton = (Button)findViewById(R.id.twitterButton);
         mTwitterButton.setOnClickListener(new View.OnClickListener() {

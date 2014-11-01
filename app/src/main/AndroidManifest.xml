@@ -22,7 +22,6 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
     <uses-feature
         android:name="android.hardware.Camera"
         android:required="true" />
@@ -103,9 +102,23 @@
             android:name="com.facebook.LoginActivity"
             android:label="@string/title_facebook_login" >
         </activity>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAPAdQdy1_bFRbjLsjgBokbYEDTWfVcejE" />
+
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="@string/title_activity_resset_password"
+            android:parentActivityName=".LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.messageapp.messageapp.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".NewPasswordActivity"
+            android:label="@string/title_activity_new_password" >
+        </activity>
     </application>
 
 </manifest>

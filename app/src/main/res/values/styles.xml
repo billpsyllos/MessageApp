@@ -5,4 +5,19 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="BackgroundColor" parent="@android:style/TextAppearance">
+        <item name="android:background">#ff2c2f36</item>
+    </style>
+    <style name="TextColorHint" parent="@android:style/TextAppearance">
+        <item name="android:textColorHint">#b4bab6b4</item>
+    </style>
+    <style name="AppName" parent="@android:style/TextAppearance">
+        <item name="android:text">@string/app_name</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">38dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
 </resources>

@@ -7,40 +7,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.messageapp.messageapp.LoginActivity"
-    android:background="#ff2c2f36">
+    style="@style/BackgroundColor">
 
 
     <TextView
+        style="@style/AppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
         android:id="@+id/title"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="38dp"
-        android:textSize="60sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
         />
     <EditText
+        style="@style/TextColorHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/usernameField"
         android:hint="@string/username_hint"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/title"
-        android:textColorHint="#b4bab6b4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="50dp" />
 
     <EditText
+        style="@style/TextColorHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/passwordField"
         android:hint="@string/password_hint"
-        android:textColorHint="#b4bab6b4"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/usernameField"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -52,7 +49,7 @@
         android:id="@+id/loginButton"
         android:layout_alignTop="@+id/signupButton"
         android:textColor="@android:color/white"
-        android:layout_toLeftOf="@+id/forgotPassword" />
+        android:layout_toLeftOf="@+id/ressetPasswordView" />
 
     <Button
         android:layout_width="match_parent"
@@ -69,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password_hint"
-        android:id="@+id/forgotPassword"
+        android:id="@+id/ressetPasswordView"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_below="@+id/loginButton"
@@ -83,7 +80,7 @@
         android:textColor="@android:color/white"
         android:background="#48449A"
         android:id="@+id/facebookbutton"
-        android:layout_below="@+id/forgotPassword"
+        android:layout_below="@+id/ressetPasswordView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp" />

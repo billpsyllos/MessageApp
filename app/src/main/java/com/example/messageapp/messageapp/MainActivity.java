@@ -191,12 +191,9 @@ public class MainActivity extends FragmentActivity implements
         }
 
         // Fetch twitter user info
-        if (ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())) {
+        /*if (ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())) {
             twitterMakeRequest();
-        }
-
-
-
+        }*/
 
 
         ParseAnalytics.trackAppOpened(getIntent());
