@@ -21,7 +21,7 @@
         android:textColor="@android:color/white"
         android:textStyle="bold" />
     <EditText
-        style="@style/TextColorHint"
+        style="@style/InputTextsStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/usernameField"
@@ -33,7 +33,7 @@
         android:layout_marginTop="183dp" />
 
     <EditText
-        style="@style/TextColorHint"
+        style="@style/InputTextsStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
@@ -45,7 +45,7 @@
         android:layout_alignParentEnd="true" />
 
     <EditText
-        style="@style/TextColorHint"
+        style="@style/InputTextsStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"

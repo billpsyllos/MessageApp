@@ -68,7 +68,7 @@ public class NewPasswordActivity extends Activity {
                         public void done(ParseUser parseUser, ParseException e) {
                             if(e==null){
                                 parseUser.setPassword(newPass.toString());
-                                parseUser.increment(ParseConstants.KEY_PASSWORD);
+                                //parseUser.increment();
                                 parseUser.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
