@@ -3,8 +3,13 @@ package com.example.messageapp.messageapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +39,7 @@ public class LoginActivity extends Activity {
     protected Button mFacebookButton;
     protected Button mTwitterButton;
     protected TextView mRessetPasswordView;
+    public static final String TAG = LoginActivity.class.getSimpleName();
 
 
     @Override
@@ -59,8 +65,10 @@ public class LoginActivity extends Activity {
 
         }*/
 
+        isMobileDataEnabled();
         ActionBar actionBar = getActionBar();
         actionBar.hide();
+
 
         mRessetPasswordView = (TextView)findViewById(R.id.ressetPasswordView);
         mRessetPasswordView.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +220,29 @@ public class LoginActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    public void isMobileDataEnabled(){
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean isWifiConn = networkInfo.isConnected();
+        networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean isMobileConn = networkInfo.isConnected();
+        Log.d(TAG, "Wifi connected: " + isWifiConn);
+        Log.d(TAG, "Mobile connected: " + isMobileConn);
+        if(isMobileConn == false && isWifiConn == false){
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setTitle(R.string.network_not_found_title);
+            builder.setMessage(R.string.network_not_found_context);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(Settings.ACTION_SETTINGS));
+                }
+            });
+            //builder.setNegativeButton(R.string.no, null);
+            builder.create().show();
+            return;
+        }
     }
 
 

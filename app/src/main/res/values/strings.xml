@@ -83,5 +83,9 @@
     <string name="update_password_button_label">Update password</string>
     <string name="invalid_password_error_title">Ooops!</string>
     <string name="invalid_password_message_error">Invalid Password.Please rewrite correct the new password</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="network_not_found_title">Network not found</string>
+    <string name="network_not_found_context">Want to enable network</string>
 
 </resources>
