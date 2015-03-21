@@ -9,11 +9,6 @@
     android:title="@string/menu_edit_friends_label"
     android:orderInCategory="100"
     android:showAsAction="never" />
-    <item android:id="@+id/action_location_enable"
-        android:title="@string/menu_location_enable"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_action_place"/>
     <item android:id="@+id/action_add_friends"
         android:title="@string/menu_add_friends_label"
         android:orderInCategory="100"

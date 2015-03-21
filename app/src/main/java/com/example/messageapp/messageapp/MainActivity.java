@@ -244,6 +244,10 @@ public class MainActivity extends FragmentActivity implements
         }
 
         checkIfLocationsIsEnable();
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        int gpsCount = 10000; //half hour
+        LocationListener ll = new myLocationListener();
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);
     }
 
 
@@ -404,26 +408,6 @@ public class MainActivity extends FragmentActivity implements
                 Intent editFrinedsIntent = new Intent(this,EditFriendsActivity.class);
                 startActivity(editFrinedsIntent);
                 break;
-            case R.id.action_location_enable:
-                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                if( !lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
-                    AlertDialog.Builder locationBuilder = new AlertDialog.Builder(this);
-                    locationBuilder.setTitle(getString(R.string.gps_not_found_title)); // GPS not found
-                    locationBuilder.setMessage(getString(R.string.gps_not_found_message)); // Want to enable?
-                     /*builder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                        + public void onClick(DialogInterface dialogInterface, int i) {
-                        + startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        + }
-                        + });*/
-                    locationBuilder.setNegativeButton(R.string.accept, null);
-                    locationBuilder.create().show();
-
-                }else{
-                    int gpsCount = 30*60*1000; //half hour
-                    LocationListener ll = new myLocationListener();
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);
-                }
-
         }
 
 
@@ -457,9 +441,7 @@ public class MainActivity extends FragmentActivity implements
                 final double pLong = location.getLongitude();
                 final double pLat = location.getLatitude();
                 final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
-
                 Log.i(TAG, "Current Long == " + pLong + " " + "Lat == " + pLat);
-
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
                 query.include(ParseConstants.KEY_USER);
                 query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
@@ -496,13 +478,13 @@ public class MainActivity extends FragmentActivity implements
                                             // will get sent to the Parse Cloud. playerName hasn't changed.
                                             update.put(ParseConstants.KEY_COORDINATES, point);
                                             update.saveInBackground();
-                                            Log.i(TAG, "Update success");
+                                            Log.i(TAG, "Location coordinates updated successfully");
                                         }
                                     }
                                 });
                             }
                             Log.i(TAG, "Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
-                            navigateToMap();
+                            //navigateToMap();
                         }
                     }
                 });
