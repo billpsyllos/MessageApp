@@ -87,5 +87,44 @@
     <string name="yes">Yes</string>
     <string name="network_not_found_title">Network not found</string>
     <string name="network_not_found_context">Want to enable network</string>
+    <string name="menu_edit_profile_action">Edit Profil</string>
+    <string name="title_activity_profile_page">ProfilePageActivity</string>
+    <string name="gender_prompt">Choose your gender</string>
+    <string name="age_prompt">Choose your age</string>
+    <string name="profile_picture_save_button">Save</string>
+    <string-array name="gender_choices">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="age_options">
+        <item>1980</item>
+        <item>1981</item>
+        <item>1982</item>
+        <item>1983</item>
+        <item>1984</item>
+        <item>1985</item>
+        <item>1986</item>
+        <item>1987</item>
+        <item>1988</item>
+        <item>1989</item>
+        <item>1990</item>
+        <item>1991</item>
+        <item>1992</item>
+        <item>1993</item>
+        <item>1994</item>
+        <item>1995</item>
+        <item>1996</item>
+        <item>1997</item>
+        <item>1998</item>
+        <item>1999</item>
+        <item>2000</item>
+    </string-array>
+
+    <string-array name="profile_camera_choices">
+        <item>Take Picture</item>
+        <item>Choose an existing picture</item>
+    </string-array>
+    <string name="profile_page_update_success">"Your profile has been updated succesfully!!!"</string>
 
 </resources>

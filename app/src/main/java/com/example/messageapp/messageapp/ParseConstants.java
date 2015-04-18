@@ -29,6 +29,10 @@ public final class ParseConstants {
     public static final String KEY_USER = "user";
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
+    public static final String CLASS_USER_PROFILE = "UserProfile";
+    public static final String KEY_PROFILE_PICTURE = "profilePicture";
+    public static final String KEY_GENDER = "gender";
+    public static final String KEY_AGE = "age";
 
 
 }

@@ -246,8 +246,8 @@ public class MainActivity extends FragmentActivity implements
         checkIfLocationsIsEnable();
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         int gpsCount = 10000; //half hour
-        LocationListener ll = new myLocationListener();
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);
+       /* LocationListener ll = new myLocationListener();
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);*/
     }
 
 
@@ -398,6 +398,11 @@ public class MainActivity extends FragmentActivity implements
                 Intent intent = new Intent(this, EditFriendsActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_edit_profil:
+                Intent profilePageIntent = new Intent(this, ProfilePageActivity.class);
+                profilePageIntent.putExtra(ParseConstants.KEY_USERNAME, ParseUser.getCurrentUser().getUsername());
+                startActivity(profilePageIntent);
+                break;
             case R.id.action_camera:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setItems(R.array.camera_choices, mDialogListener);
@@ -474,8 +479,6 @@ public class MainActivity extends FragmentActivity implements
                                 query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
                                     public void done(ParseObject update, ParseException e) {
                                         if (e == null) {
-                                            // Now let's update it with some new data. In this case, only cheatMode and score
-                                            // will get sent to the Parse Cloud. playerName hasn't changed.
                                             update.put(ParseConstants.KEY_COORDINATES, point);
                                             update.saveInBackground();
                                             Log.i(TAG, "Location coordinates updated successfully");

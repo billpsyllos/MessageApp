@@ -1,0 +1,293 @@
+[33mcommit 496521c68ca3f90bca3833f6ff66f82269b3a020[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Sat Mar 21 12:11:03 2015 +0200
+
+    take user location after login
+
+[33mcommit f78f7abaff63d152bac2890d86182eae1c2ae8b1[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Sat Mar 21 11:52:44 2015 +0200
+
+    check if user has enabled location and network services
+
+[33mcommit 81474cf7605597051c208e27d2238e6c588a4b19[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Mar 16 21:57:43 2015 +0200
+
+    mega commit
+
+[33mcommit cd072fd06cea6974c9e56c917f428f00d6f5b34f[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Sat Nov 1 15:51:01 2014 +0200
+
+    create activities for reset password and some minor changes
+
+[33mcommit 43efb9a94d645ad3954b0dd1592dd902d27603d6[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Fri Oct 31 00:05:07 2014 +0200
+
+    allow users connect with twitter
+
+[33mcommit 7afcea5692a574a73746e0c9648531d5963c0611[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 30 23:08:46 2014 +0200
+
+    Return to login...underline textViews
+
+[33mcommit ef52c7bbd44ab69edc16a01c951cf1ca8f0f3031[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 30 22:40:19 2014 +0200
+
+    customize sign up screen
+
+[33mcommit 8eb19040e2067ce21de3eac126f5d630304e2c32[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 30 22:05:34 2014 +0200
+
+    Customize login screen and allow users to connect with facebook, Import facebook sdk and include it as module to androidStudio
+
+[33mcommit 15ba089c1dc1e4bcf4fd0a5fe36d5d34cc371298[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 30 02:07:57 2014 +0200
+
+    add button to navigate from fragment to Activity.class
+
+[33mcommit 70ab150d6c02ea6195d6b562f63ee909eccd1145[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 30 01:33:18 2014 +0200
+
+    display date at marker
+
+[33mcommit 010c7e8c708043052ac9242516114657ad26f839[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 29 03:04:00 2014 +0200
+
+    if userexist update coordinates else insert
+
+[33mcommit 318d00b02aaa4295928ef962914003272635d81c[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Tue Oct 28 20:36:52 2014 +0200
+
+    display users in google map
+
+[33mcommit 89948a1109c03dedb07e172fbd975a2686d8844e[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 23 20:48:43 2014 +0300
+
+    minor changes
+
+[33mcommit 98773cc8c11d16bc1b83ce5918e483b28688b2b6[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 23 17:42:58 2014 +0300
+
+    Create new Fragment name Posts and display a list of posts tha user publish
+
+[33mcommit 7953051f4873113ff7562b11f18cf5cc11c1e58c[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Tue Oct 21 02:36:15 2014 +0300
+
+    associate latitude and longitude coordinates with an Parseobject
+
+[33mcommit 9423b78a39e1b683e992d8d306608620cbef63de[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 16 00:59:59 2014 +0300
+
+    resolved bugs
+
+[33mcommit 173d52e38c8d9943d42a1ee6dda1a0c4012cae5d[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 16 00:10:03 2014 +0300
+
+    deleted files
+
+[33mcommit 32cee18878e4c745f14f7a5ee3ca071376c1bd8b[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 16 00:07:28 2014 +0300
+
+    When the user select a friend then display a list of messages from this friend
+
+[33mcommit cdd7f513bb5642e1d2529d14a81f35ffca83af2c[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Tue Oct 14 20:12:58 2014 +0300
+
+    hidding the action bar
+
+[33mcommit 45fa1fc01dfa1ccd0899ef366ea971efeffc8900[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 13 20:03:12 2014 +0300
+
+    display image description in to View ImageActivity
+
+[33mcommit 8100b61734d1de4acd36fbe14d1b02edee8442dd[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 13 18:35:56 2014 +0300
+
+    Added description field to RecipientsActivity. Sending description with pictures or video and display them to inbox
+
+[33mcommit b260ad76e8e6e5feac72120658fe1063edab4025[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 13 17:45:03 2014 +0300
+
+    added image preview before send a picture
+
+[33mcommit 25eeb1bed11139e3543fbd8b3c19037585e54733[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 13 14:03:58 2014 +0300
+
+    created a autocomplete text view to find friends
+
+[33mcommit 1816e956892ed2631df2b902f2f7fd12b6e68bb5[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 9 20:48:06 2014 +0300
+
+    resolved bugs
+
+[33mcommit ceebc9928712e3a73bc9829d43e796b8e32073ca[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 9 18:56:39 2014 +0300
+
+    Bug resolved
+
+[33mcommit 168fbc4306948ff2bae86a6d056968d412661d8d[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 9 18:32:28 2014 +0300
+
+    Added friends button in action bar
+
+[33mcommit d095fbb0219fe6d1de6418d7c888b3051cec5dd4[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 9 01:51:27 2014 +0300
+
+    Created two intent variables to display image(in a new activity using Picasso) and video
+
+[33mcommit 0b8a4147b0ca21f15f8f34d7df496ea347fe1a56[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 9 00:49:05 2014 +0300
+
+    Created a custom list adapter for messages
+
+[33mcommit 16a387aaaba4972ced9d3628c9126abe82991599[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 8 23:09:50 2014 +0300
+
+    creating a list layout for messages
+
+[33mcommit b142fa5824242f289acea88395fdf3fab37fdb5e[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 8 22:45:19 2014 +0300
+
+    Build query to retrieve messages from back end and display them into InboxFragment
+
+[33mcommit 0de9991314a918cba661d3c0f4d409ceec2fdc4a[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 8 13:26:42 2014 +0300
+
+    Created a message using attributes sender id,sender name,file type,recipients id and also used existing code from github (Image Resizer.java,FileHelper.java) succeed to get the attributes from a file such as a Byte Array of file and create the file name
+
+[33mcommit 1e05a53c7e04e856efa06ec44566ade2c90b057a[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 6 23:32:12 2014 +0300
+
+    created a list of recipients when want to send an item..Also added a send icon on menu bar which is displayed when select a recipient
+
+[33mcommit 76a8b7f610d06580ea4eb5dad8b0fcd3f942ee23[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 6 16:57:38 2014 +0300
+
+    Choosing a video from the gallery checking the file size
+
+[33mcommit 06d1b6a9c36b14151b8f60fd418b322c45d60100[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 6 16:17:31 2014 +0300
+
+    Selecting a photo from the gallery
+
+[33mcommit fc23fb8065ecbd880994140d9d1102aaf6fab241[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Mon Oct 6 15:53:33 2014 +0300
+
+    Taking a video using an intent
+
+[33mcommit 4f164c188b69113a11379c2876c7c53e02f495cc[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Sat Oct 4 02:18:04 2014 +0300
+
+    Created a subfolder into the gallery to save photo which captured from our application
+
+[33mcommit f868c6373ed1e08b40002b7095088c4208d59a74[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 2 17:20:29 2014 +0300
+
+    Taking photos using intent...Coolgit add -Agit add -A
+
+[33mcommit 051cd7fee511f67b5575a5af0d955c63fab5f93c[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 2 17:03:20 2014 +0300
+
+    presenting a list of choices when the camera button pressed
+
+[33mcommit 85b659fdc12a0212a6b4db4103160d6657b54059[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 2 16:24:55 2014 +0300
+
+    added a camera button in the Action Bar
+
+[33mcommit a498ec8283de644d5f7216837391aa47f44c5f32[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Oct 2 03:09:35 2014 +0300
+
+    Created a new activity 'Edit Friends' to store a list and select friends. Save friends RelationShips using Parse API and added checkmarks for already friends...Also display our friends to Friends Fragment..and finaly created option to remove  friends
+
+[33mcommit d87d471953a6a944e3ccca686bbf14f50782fe53[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 1 20:01:53 2014 +0300
+
+    Created a new activity 'EditFriendsActivity' and build query to retrieve data from backend and display them to a list
+
+[33mcommit 2f893a1de0aaf7eb32fae7d20b013fd5c44637ed[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Wed Oct 1 18:44:10 2014 +0300
+
+    created new fragments foreach tab (friends,indox)
+
+[33mcommit 836faa89a77c8bb6e02541974cfdeb807529feba[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Tue Sep 30 18:18:53 2014 +0300
+
+    add fragment tabs
+
+[33mcommit 0e3cf204a751fffce15f929f1bde18941f64666d[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Fri Sep 26 01:57:38 2014 +0300
+
+    adding a progress indicator
+
+[33mcommit 6d3e9d67199d83b0be18cad58cadd24b9dec576b[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Fri Sep 26 01:50:18 2014 +0300
+
+    Created Logout
+
+[33mcommit e35ad9cea5428e03e133d65357b82c82fd4dc559[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Fri Sep 26 01:24:07 2014 +0300
+
+    Create an authentication system using Parse API
+
+[33mcommit e6473cdd0af470d136d849428e0d623c6027d342[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Sep 25 17:26:37 2014 +0300
+
+    add third-party library Parse
+
+[33mcommit f2d9433f153bf4b6c99a909069ef441d6013b8b3[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Sep 25 16:42:20 2014 +0300
+
+    Navigation with back and up
+
+[33mcommit 14b429e6cd0069a52157d0d495c7523f0830b781[m
+Author: billpsyllos <billpsyllos1@gmail.com>
+Date:   Thu Sep 25 16:15:43 2014 +0300
+
+    import project and create 2 new activities (Login and SignUp) and also create a textview listener to navigate between activities
