@@ -28,6 +28,11 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
@@ -50,7 +55,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity implements
-        ActionBar.TabListener {
+        ActionBar.TabListener, GoogleApiClient.ConnectionCallbacks , GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -68,6 +73,8 @@ public class MainActivity extends FragmentActivity implements
 
     protected Uri mMediaUri ;
     protected ParseUser mUser;
+    protected GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
 
 
@@ -180,11 +187,10 @@ public class MainActivity extends FragmentActivity implements
     ViewPager mViewPager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
-
 
         // Fetch Facebook user info if the session is active
         Session session = ParseFacebookUtils.getSession();
@@ -199,7 +205,6 @@ public class MainActivity extends FragmentActivity implements
         }*/
 
         ParseAnalytics.trackAppOpened(getIntent());
-
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
@@ -244,13 +249,33 @@ public class MainActivity extends FragmentActivity implements
         }
 
         checkIfLocationsIsEnable();
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        int gpsCount = 10000; //half hour
-       /* LocationListener ll = new myLocationListener();
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, gpsCount, 0, ll);*/
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -439,69 +464,79 @@ public class MainActivity extends FragmentActivity implements
                                 FragmentTransaction fragmentTransaction) {
     }
 
-    private class myLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(final Location location) {
-            if (location != null) {
-                final double pLong = location.getLongitude();
-                final double pLat = location.getLatitude();
-                final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
-                Log.i(TAG, "Current Long == " + pLong + " " + "Lat == " + pLat);
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
-                query.include(ParseConstants.KEY_USER);
-                query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> locations, ParseException ee) {
-                        mLocations = locations;
-                        String[] usernames = new String[mLocations.size()];
-                        String[] objectId = new String[mLocations.size()];
-                        int i = 0;
-                        if (locations.size() == 0) {
-                            ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
-                            locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
-                            locationObject.put(ParseConstants.KEY_COORDINATES, point);
-                            try {
-                                locationObject.save();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            Log.i(TAG, "Insert Success");
-                            navigateToMap();
-                        }else if (locations.size() == 1) {
-                            for (ParseObject location : mLocations) {
-                                usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
-                                objectId[i] = location.getObjectId();
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(TAG, "Location services connected.");
+        //Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
 
-                                //if exist make update
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
-                                // Retrieve the object by id
-                                query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
-                                    public void done(ParseObject update, ParseException e) {
-                                        if (e == null) {
-                                            update.put(ParseConstants.KEY_COORDINATES, point);
-                                            update.saveInBackground();
-                                            Log.i(TAG, "Location coordinates updated successfully");
-                                        }
-                                    }
-                                });
-                            }
-                            Log.i(TAG, "Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
-                            //navigateToMap();
-                        }
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Location services suspended. Please reconnect.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
+
+    private void handleNewLocation(Location location) {
+
+        final double pLong = location.getLongitude();
+        final double pLat = location.getLatitude();
+        final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
+        Log.d(TAG, location.toString());
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
+        query.include(ParseConstants.KEY_USER);
+        query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> locations, ParseException ee) {
+                mLocations = locations;
+                String[] usernames = new String[mLocations.size()];
+                String[] objectId = new String[mLocations.size()];
+                int i = 0;
+                if (locations.size() == 0) {
+                    ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
+                    locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
+                    locationObject.put(ParseConstants.KEY_COORDINATES, point);
+                    try {
+                        locationObject.save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                });
+                    Log.i(TAG, "Insert first time geolocations for current user");
+                    //navigateToMap();
+                }else if (locations.size() == 1) {
+                    for (ParseObject location : mLocations) {
+                        usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
+                        objectId[i] = location.getObjectId();
+                        //if exist make update
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
+                        // Retrieve the object by id
+                        query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
+                            public void done(ParseObject update, ParseException e) {
+                                if (e == null) {
+                                    update.put(ParseConstants.KEY_COORDINATES, point);
+                                    update.saveInBackground();
+                                    Log.i(TAG, "Location coordinates updated successfully");
+                                }
+                            }
+                        });
+                    }
+                    Log.i(TAG, "Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
+                    //navigateToMap();
+                }
             }
-        }
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-        }
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-        @Override
-        public void onProviderDisabled(String s) {
-        }
+        });
+
     }
 
     public void checkIfLocationsIsEnable(){
@@ -520,5 +555,4 @@ public class MainActivity extends FragmentActivity implements
             return;
         }
     }
-
 }

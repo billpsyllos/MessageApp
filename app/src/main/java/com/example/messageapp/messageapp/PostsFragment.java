@@ -20,9 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -42,8 +40,8 @@ import java.util.Map;
  * Created by billaros on 30/9/2014.
  */
 public class PostsFragment extends ListFragment implements LocationListener,
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
        {
 
     public static final String TAG = PostsFragment.class.getSimpleName();
@@ -124,10 +122,12 @@ public class PostsFragment extends ListFragment implements LocationListener,
 
     }
 
-    @Override
-    public void onDisconnected() {
+           @Override
+           public void onConnectionSuspended(int i) {
 
-    }
+           }
+
+
 
     @Override
     public void onLocationChanged(Location location) {
