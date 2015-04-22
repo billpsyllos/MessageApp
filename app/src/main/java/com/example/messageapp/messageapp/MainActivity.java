@@ -24,10 +24,13 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphUser;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
@@ -45,6 +48,8 @@ import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.twitter.Twitter;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -193,11 +198,13 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
 
         // Fetch Facebook user info if the session is active
-        Session session = ParseFacebookUtils.getSession();
-        if (session != null && session.isOpened()) {
-            facebookMakeMeRequest();
-            Log.d(TAG,"Facebook user logged in");
-        }
+//        Session session = Session.getActiveSession();
+//        if (session != null && session.isOpened()) {
+//            facebookMakeMeRequest();
+//            Log.d(TAG,"Facebook user logged in");
+//        }
+
+
 
         // Fetch twitter user info
         /*if (ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())) {
@@ -205,12 +212,17 @@ public class MainActivity extends FragmentActivity implements
         }*/
 
         ParseAnalytics.trackAppOpened(getIntent());
-        ParseUser currentUser = ParseUser.getCurrentUser();
+        final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
         }
         else {
             Log.i(TAG, currentUser.getUsername());
+        }
+
+        if (ParseFacebookUtils.isLinked(currentUser)) {
+
+            facebookMakeMeRequest();
         }
 
         // Set up the action bar.
@@ -280,6 +292,7 @@ public class MainActivity extends FragmentActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
             // add it to the Gallery
@@ -365,31 +378,32 @@ public class MainActivity extends FragmentActivity implements
         return true;
     }
     private void facebookMakeMeRequest() {
-        Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
-                new Request.GraphUserCallback() {
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (user != null) {
-                                //Parse jsonObject
-                                String firstName = user.getFirstName();
-                                ParseUser mUser = ParseUser.getCurrentUser();
-                                mUser.put(ParseConstants.KEY_USERNAME, firstName);
-                                mUser.saveInBackground(new SaveCallback() {
-                                    public void done(com.parse.ParseException e) {
-                                        // TODO Auto-generated method stub
-                                        if (e == null) {
-                                            Log.d(TAG,"Facebook Username updated successfully");
-                                        } else {
-                                            Log.d(TAG,"Error");
-                                        }
-                                    }
-                                });
-                        } else if (response.getError() != null) {
-                            // handle error
+        //String accessToken = FacebookSdk.getClientToken();
+
+        GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject user, GraphResponse response) {
+                if (user != null) {
+                    //profilePictureView.setProfileId(user.optString("id"));
+                    String firstName = user.optString("first_name");
+                    ParseUser mUser = ParseUser.getCurrentUser();
+                    mUser.put(ParseConstants.KEY_USERNAME, firstName);
+                    mUser.saveInBackground(new SaveCallback() {
+                        public void done(ParseException e) {
+                            // TODO Auto-generated method stub
+                            if (e == null) {
+                                Log.d(TAG,"Facebook Username updated successfully");
+                            } else {
+                                Log.d(TAG,"Error");
+                            }
                         }
-                    }
-                });
-        request.executeAsync();
+                    });
+                } else if (response.getError() != null) {
+                    // handle error
+                }
+            }
+        }).executeAsync();
+
 
     }
     private void twitterMakeRequest() {

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">MessageApp</string>
+    <string name="facebook_app_id">662012717251702</string>
     <string name="title_section1">Inbox</string>
     <string name="title_section2">Friends</string>
     <string name="hello_world">Hello world!</string>
