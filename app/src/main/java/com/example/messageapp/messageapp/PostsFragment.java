@@ -70,40 +70,7 @@ public class PostsFragment extends ListFragment implements LocationListener,
         super.onResume();
         getActivity().setProgressBarIndeterminateVisibility(true);
 
-        mPostButton = (Button)getView().findViewById(R.id.post_button);
-        mPostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addPostIntent = new Intent(getActivity(),PostActivity.class);
-                addPostIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                addPostIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(addPostIntent);
-            }
-        });
 
-        //ParseObject obj = ParseObject.createWithoutData("Posts","User");
-        ParseQuery<ParseObject> gameQuery = ParseQuery.getQuery(ParseConstants.CLASS_POSTS);
-        gameQuery.include(ParseConstants.KEY_POSTS_CREATED_BY);
-        gameQuery.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
-        gameQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> posts, ParseException e) {
-                getActivity().setProgressBarIndeterminateVisibility(false);
-                if ( e == null) {
-                    mPosts = posts;
-                    String usernames[] = new String[mPosts.size()];
-                    String text[] = new String[mPosts.size()];
-                    int i = 0;
-                    for (ParseObject post : mPosts) {
-                        text[i] = post.getString(ParseConstants.KEY_POSTS_TEXT);
-                        usernames[i] = post.getParseUser(ParseConstants.KEY_POSTS_CREATED_BY).getUsername().toString();
-                        i++;
-                        PostsAdapter postsAdapter = new PostsAdapter(getListView().getContext(), mPosts);
-                        setListAdapter(postsAdapter);
-                    }
-                }
-            }
-        });
 
 
     }

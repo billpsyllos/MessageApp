@@ -126,5 +126,8 @@
         <item>Choose an existing picture</item>
     </string-array>
     <string name="profile_page_update_success">"Your profile has been updated succesfully!!!"</string>
+    <string name="title_activity_find_friends">FindFriendsActivity</string>
+    <string name="content_description_user_avatar">User avatar</string>
+    <string name="title_activity_chat_box">ChatBoxActivity</string>
 
 </resources>

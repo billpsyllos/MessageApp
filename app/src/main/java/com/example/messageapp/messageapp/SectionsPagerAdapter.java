@@ -31,7 +31,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new FriendsFragment();
             case 2:
-                return new PostsFragment();
+                return new FindFriendsFragment();
 
         }
 

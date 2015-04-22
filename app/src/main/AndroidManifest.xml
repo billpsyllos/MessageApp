@@ -123,6 +123,14 @@
             android:name=".ProfilePageActivity"
             android:label="@string/title_activity_profile_page" >
         </activity>
+        <activity
+            android:name=".FindFriendsFragment"
+            android:label="@string/title_activity_find_friends" >
+        </activity>
+        <activity
+            android:name=".ChatBoxActivity"
+            android:label="@string/title_activity_chat_box" >
+        </activity>
     </application>
 
 </manifest>

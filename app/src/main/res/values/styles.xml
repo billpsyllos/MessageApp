@@ -21,4 +21,9 @@
         <item name="android:layout_centerHorizontal">true</item>
     </style>
 
+    <style name="GridView">
+        <item name="android:padding">@dimen/user_grid_spacing</item>
+
+    </style>
+
 </resources>

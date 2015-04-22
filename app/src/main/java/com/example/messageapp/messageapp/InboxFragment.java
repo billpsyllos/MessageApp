@@ -36,6 +36,7 @@ public class InboxFragment extends ListFragment {
 
     protected List<ParseObject> mMessages;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +72,6 @@ public class InboxFragment extends ListFragment {
                     }
                     if(getListView().getAdapter() == null) {
                         MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
-
                         setListAdapter(adapter);
                     }else{
                         //refill

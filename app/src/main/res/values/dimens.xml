@@ -14,4 +14,5 @@
     <dimen name="descriptionLabel_padding_bottom">10dp</dimen>
     <dimen name="senderDescriptionView_text_size">14dp</dimen>
     <dimen name="senderDescriptionView_padding_left">20dp</dimen>
+    <dimen name="user_grid_spacing">8dp</dimen>
 </resources>
