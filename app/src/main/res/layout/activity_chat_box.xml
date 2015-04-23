@@ -12,7 +12,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/pushText"
         android:hint="Send your message"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"

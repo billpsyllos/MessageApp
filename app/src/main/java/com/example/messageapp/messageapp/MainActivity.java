@@ -385,14 +385,14 @@ public class MainActivity extends FragmentActivity implements
             public void onCompleted(JSONObject user, GraphResponse response) {
                 if (user != null) {
                     //profilePictureView.setProfileId(user.optString("id"));
-                    String firstName = user.optString("first_name");
+                    final String firstName = user.optString("first_name");
                     ParseUser mUser = ParseUser.getCurrentUser();
                     mUser.put(ParseConstants.KEY_USERNAME, firstName);
                     mUser.saveInBackground(new SaveCallback() {
                         public void done(ParseException e) {
                             // TODO Auto-generated method stub
                             if (e == null) {
-                                Log.d(TAG,"Facebook Username updated successfully");
+                                Log.d(TAG,"Facebook Username updated successfully ==== " + firstName);
                             } else {
                                 Log.d(TAG,"Error");
                             }

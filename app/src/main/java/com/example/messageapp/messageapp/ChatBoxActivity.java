@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.parse.ParseInstallation;
+import com.parse.ParseQuery;
 
 
 public class ChatBoxActivity extends Activity {
@@ -12,6 +18,15 @@ public class ChatBoxActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_box);
+
+        EditText pushdText = (EditText) findViewById(R.id.pushText);
+        Button sendPush = (Button) findViewById(R.id.sendButton);
+        sendPush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendPushNotifications();
+            }
+        });
     }
 
 
@@ -35,5 +50,13 @@ public class ChatBoxActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void sendPushNotifications(){
+
+//        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+//        //query.whereEqualTo(ParseConstants.KEY_USER_ID,"")
+//
+//        //query
     }
 }

@@ -171,6 +171,7 @@ public class LoginActivity extends Activity {
                             setProgressBarIndeterminateVisibility(false);
                             if ( e == null){
                                 //Success!
+                                MessageApplication.updateParseInstallation(user);
                                 navigateToMain();
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
