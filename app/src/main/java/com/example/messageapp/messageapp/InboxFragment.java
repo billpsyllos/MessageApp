@@ -5,12 +5,14 @@ import android.net.Uri;
 import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -35,6 +37,7 @@ public class InboxFragment extends ListFragment {
     public static final String TAG = InboxFragment.class.getSimpleName();
 
     protected List<ParseObject> mMessages;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override
@@ -42,6 +45,9 @@ public class InboxFragment extends ListFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
         return rootView;
     }
@@ -51,6 +57,11 @@ public class InboxFragment extends ListFragment {
         super.onResume();
         getActivity().setProgressBarIndeterminateVisibility(true);
 
+        retrieveMessages();
+
+    }
+
+    private void retrieveMessages() {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_MESSAGES);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
@@ -58,6 +69,11 @@ public class InboxFragment extends ListFragment {
             @Override
             public void done(List<ParseObject> messages, ParseException e) {
                 getActivity().setProgressBarIndeterminateVisibility(false);
+
+                if(mSwipeRefreshLayout.isRefreshing()){
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
                 if(e == null){
                     //success
                     mMessages = messages;
@@ -80,7 +96,6 @@ public class InboxFragment extends ListFragment {
                 }
             }
         });
-
     }
 
     @Override
@@ -124,8 +139,12 @@ public class InboxFragment extends ListFragment {
         }
         */
 
-
-
-
     }
+
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            retrieveMessages();
+        }
+    };
 }
