@@ -28,6 +28,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -39,16 +40,17 @@ public class ProfilePageActivity extends Activity {
 
     public static final String TAG = ProfilePageActivity.class.getSimpleName();
     protected Uri mMediaUri ;
+    protected Uri mTakePicture;
     protected String mFileType = "image";
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int CHOOSE_PHOTO_REQUEST = 2;
     public static final int MEDIA_TYPE_IMAGE = 4;
-    public static final int MEDIA_TYPE_VIDEO = 5;
     public static int result = 0;
     protected List<ParseObject> mProfile;
     protected List<ParseObject> mPictureProfiles;
     public static Drawable drawable;
     static boolean activeResults = false;
+    protected ImageView mProfileView;
 
 
     protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
@@ -61,7 +63,7 @@ public class ProfilePageActivity extends Activity {
                     if (mMediaUri ==null){
                         Toast.makeText(ProfilePageActivity.this, getString(R.string.error_external_storage), Toast.LENGTH_LONG).show();
                     }
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT,mMediaUri);
                     startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                     break;
                 case 1://Choose an existing picture
@@ -78,6 +80,9 @@ public class ProfilePageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
 
+
+        mProfileView = (ImageView) findViewById(R.id.defaultProfilePicture);
+        profileViewClickListener();
         drawable = this.getResources().getDrawable(R.drawable.default_profile_picture);
 
         String currentUsername = getIntent().getExtras().getString(ParseConstants.KEY_USERNAME);
@@ -109,18 +114,22 @@ public class ProfilePageActivity extends Activity {
         if (resultCode == RESULT_OK) {
             activeResults = true;
             Log.i(TAG,"resultCode: " + resultCode);
-            if (requestCode == CHOOSE_PHOTO_REQUEST ||requestCode == TAKE_PHOTO_REQUEST ) {
+            if (requestCode == CHOOSE_PHOTO_REQUEST  ) {
                 if (data == null) {
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 }else {
                     //we are passing that Uri back using getData()
                     mMediaUri = data.getData();
                     mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
-                    ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
-                    profileView.setImageURI(Uri.parse(String.valueOf(mMediaUri)));
+
                 }
                 Log.i(TAG, "Media Uri: " + mMediaUri + " - File Type:  " + mFileType);
+            }else if(requestCode == TAKE_PHOTO_REQUEST){
+                mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
+                Log.i(TAG, "Media Uri: " + mMediaUri + " - File Type:  " + mFileType);
             }
+            ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
+            profileView.setImageURI(Uri.parse(String.valueOf(mMediaUri)));
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
@@ -173,9 +182,6 @@ public class ProfilePageActivity extends Activity {
             if (mediaType == MEDIA_TYPE_IMAGE){
                 mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                         "IMG_"+ timeStamp + ".jpg");
-            } else if(mediaType == MEDIA_TYPE_VIDEO) {
-                mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "VID_"+ timeStamp + ".mp4");
             } else {
                 return null;
             }
@@ -212,60 +218,70 @@ public class ProfilePageActivity extends Activity {
                 String[] picturesProfilesId = new String[mPictureProfiles.size()];
                 int i = 0;
                 if (mPictureProfiles.size() == 0) {
-                    ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
 
-                    profileView.setImageDrawable(drawable);
-                    profileView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePageActivity.this);
-                            builder.setItems(R.array.profile_camera_choices, mDialogListener);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                    });
+                    mProfileView.setImageDrawable(drawable);
+                    profileViewClickListener();
                     Log.d(TAG,"User has not profile result===== " + result );
                 }else if(mPictureProfiles.size() == 1) {
                     for(final ParseObject profilePicture : mPictureProfiles){
-                        picturesProfilesId[i] = profilePicture.getObjectId();
-                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
-                        query.getInBackground(picturesProfilesId[i], new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                ParseFile fileObject = (ParseFile) object.get(ParseConstants.KEY_PROFILE_PICTURE);
-                                fileObject.getDataInBackground(new GetDataCallback() {
-                                    @Override
-                                    public void done(byte[] bytes, ParseException e) {
-                                        if(e == null){
-                                            Log.d(TAG,"We've got data in data");
-                                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                                            ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
-                                            profileView.setImageBitmap(bmp);
-                                            profileView.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePageActivity.this);
-                                                    builder.setItems(R.array.profile_camera_choices, mDialogListener);
-                                                    AlertDialog dialog = builder.create();
-                                                    dialog.show();
-                                                }
-                                            });
-                                        }else {
-                                            Log.d(TAG,"There was a problem downloading the data.");
 
-                                        }
+                        ParseFile file = profilePicture.getParseFile(ParseConstants.KEY_PROFILE_PICTURE);
+                        Uri fileUri = Uri.parse(file.getUrl());
+                        Picasso.with(ProfilePageActivity.this).load(fileUri.toString()).into(mProfileView);
+                        profileViewClickListener();
 
-                                    }
-                                });
 
-                            }
-                        });
+//                        picturesProfilesId[i] = profilePicture.getObjectId();
+//                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
+//                        query.getInBackground(picturesProfilesId[i], new GetCallback<ParseObject>() {
+//                            @Override
+//                            public void done(ParseObject object, ParseException e) {
+//                                ParseFile fileObject = (ParseFile) object.get(ParseConstants.KEY_PROFILE_PICTURE);
+//                                fileObject.getDataInBackground(new GetDataCallback() {
+//                                    @Override
+//                                    public void done(byte[] bytes, ParseException e) {
+//                                        if(e == null){
+//                                            Log.d(TAG,"We've got data in data");
+//                                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+//                                            ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
+//                                            profileView.setImageBitmap(bmp);
+//                                            profileView.setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View view) {
+//                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePageActivity.this);
+//                                                    builder.setItems(R.array.profile_camera_choices, mDialogListener);
+//                                                    AlertDialog dialog = builder.create();
+//                                                    dialog.show();
+//                                                }
+//                                            });
+//                                        }else {
+//                                            Log.d(TAG,"There was a problem downloading the data.");
+//
+//                                        }
+//
+//                                    }
+//                                });
+//
+//                            }
+//                        });
                     }
                     Log.d(TAG,"User has profile result===== " + result );
                 }
             }
         });
 
+    }
+
+    private void profileViewClickListener() {
+        mProfileView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePageActivity.this);
+                builder.setItems(R.array.profile_camera_choices, mDialogListener);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
     private void updateUserProfile(){
