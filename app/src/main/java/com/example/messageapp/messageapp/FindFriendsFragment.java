@@ -119,8 +119,6 @@ public class FindFriendsFragment extends Fragment {
 
     }
 
-
-
     public static float calculateDistance(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 6371000; //meters
         double dLat = Math.toRadians(lat2-lat1);
@@ -142,7 +140,6 @@ public class FindFriendsFragment extends Fragment {
             chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
             chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
             startActivity(chatIntent);
-
         }
     };
 

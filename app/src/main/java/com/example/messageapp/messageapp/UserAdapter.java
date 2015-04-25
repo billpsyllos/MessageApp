@@ -3,6 +3,7 @@ package com.example.messageapp.messageapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class UserAdapter extends ArrayAdapter<ParseObject> {
         super(context,R.layout.user_item, users);
         mContext = context ;
         mUsers = users;
+        //this.mPicasso = Picasso.with(context);
 
     }
 
@@ -55,30 +58,23 @@ public class UserAdapter extends ArrayAdapter<ParseObject> {
         ParseObject user = mUsers.get(position);
         ParseUser objectId = user.getParseUser(ParseConstants.KEY_USER);
 
-//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
-//        query.whereEqualTo(ParseConstants.KEY_USER, objectId);
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> images, ParseException e) {
-//                mPictureProfiles = images;
-//                if ( images == null) {
-//                    holder.userImageView.setImageResource(R.drawable.default_profile_picture);
-//                }else{
-//                    for (ParseObject profilePicture : mPictureProfiles) {
-//                        ParseFile fileObject = (ParseFile) profilePicture.get(ParseConstants.KEY_PROFILE_PICTURE);
-//                        fileObject.getDataInBackground(new GetDataCallback() {
-//                            @Override
-//                            public void done(byte[] bytes, ParseException e) {
-//                                if(e == null){
-//                                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                                    holder.userImageView.setImageBitmap(bmp);
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
+        query.whereEqualTo(ParseConstants.KEY_USER, objectId);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> images, ParseException e) {
+                mPictureProfiles = images;
+                if ( images == null) {
+                    holder.userImageView.setImageResource(R.drawable.default_profile_picture);
+                }else{
+                    for (ParseObject profilePicture : mPictureProfiles) {
+                        ParseFile fileObject = (ParseFile) profilePicture.get(ParseConstants.KEY_PROFILE_PICTURE);
+                        Uri fileUri = Uri.parse(fileObject.getUrl());
+                        Picasso.with(mContext).load(fileUri.toString()).into(holder.userImageView);
+                    }
+                }
+            }
+        });
 
         holder.userImageView.setImageResource(R.drawable.default_profile_picture);
         holder.nameLabel.setText(user.getParseUser(ParseConstants.KEY_USER).getUsername());
