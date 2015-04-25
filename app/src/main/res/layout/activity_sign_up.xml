@@ -30,6 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:textColor="@android:color/white"
         android:layout_marginTop="183dp" />
 
     <EditText
@@ -42,6 +43,7 @@
         android:hint="@string/password_hint"
         android:layout_below="@+id/usernameField"
         android:layout_alignParentRight="true"
+        android:textColor="@android:color/white"
         android:layout_alignParentEnd="true" />
 
     <EditText
@@ -54,6 +56,7 @@
         android:hint="@string/email_hint"
         android:layout_below="@+id/passwordField"
         android:layout_alignParentRight="true"
+        android:textColor="@android:color/white"
         android:layout_alignParentEnd="true" />
 
     <Button

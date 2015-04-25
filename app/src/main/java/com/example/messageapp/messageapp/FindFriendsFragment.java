@@ -42,6 +42,9 @@ public class FindFriendsFragment extends Fragment {
     protected ParseUser mCurrentUser;
     protected String[] userIds;
     protected String[] usernames;
+    protected Float[] userDist;
+    protected ParseGeoPoint[] coordinats;
+    protected String[] objectId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,10 +93,11 @@ public class FindFriendsFragment extends Fragment {
                 mLocations = locations;
                 if(locations != null && e == null) {
                     int i = 0;
-                    ParseGeoPoint[] coordinats = new ParseGeoPoint[mLocations.size()];
+                    coordinats = new ParseGeoPoint[mLocations.size()];
                     usernames = new String[mLocations.size()];
                     userIds = new String[mLocations.size()];
-
+                    userDist = new Float[mLocations.size()];
+                    objectId = new String[mLocations.size()];
                     for (ParseObject location : mLocations) {
                         coordinats[i] = location.getParseGeoPoint(ParseConstants.KEY_COORDINATES);
                         guestLong = coordinats[i].getLongitude();
@@ -102,6 +106,7 @@ public class FindFriendsFragment extends Fragment {
                         if (dist < 1) {
                             usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
                             userIds[i] = location.getParseUser(ParseConstants.KEY_USER).getObjectId();
+                            objectId[i] = location.getObjectId();
                             Log.d(TAG, "Distance between current user and " + usernames[i] + " == " + String.valueOf(dist) + "Km");
                         }
                         i++;
@@ -135,10 +140,10 @@ public class FindFriendsFragment extends Fragment {
     protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-         //   ImageView userImageView = (ImageView)view.findViewById(R.id.userImageView);
-            Intent chatIntent = new Intent(getActivity(),ChatBoxActivity.class);
+            Intent chatIntent = new Intent(getActivity(),MapActivity.class);
             chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
             chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+            chatIntent.putExtra(ParseConstants.KEY_OBJECT_ID, objectId[position]);
             startActivity(chatIntent);
         }
     };

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,12 @@ public class UserAdapter extends ArrayAdapter<ParseObject> {
             }
         });
 
-        holder.userImageView.setImageResource(R.drawable.default_profile_picture);
+        try {
+            holder.userImageView.setImageResource(R.drawable.default_profile_picture);
+
+        }catch (Exception e){
+            Log.e("Profile","RunTime Exception",e);
+        }
         holder.nameLabel.setText(user.getParseUser(ParseConstants.KEY_USER).getUsername());
 
 

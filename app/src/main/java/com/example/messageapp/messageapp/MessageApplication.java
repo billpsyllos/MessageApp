@@ -31,7 +31,7 @@ public class MessageApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this, "wdfoNc9o8Me7cPD0xtHEfkZH41mbHIXflPxeaY0h", "mM3kS9oOqplrGM7WwX0tWyfpp71hRcHoq2Am0S8d");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
+        //ParseInstallation.getCurrentInstallation().saveInBackground();
         FacebookSdk.sdkInitialize(getApplicationContext());
         ParseFacebookUtils.initialize(this);
         ParseTwitterUtils.initialize("WEG8zu3hpG0qLn0JkYDJ4nlBZ", "lh6vM4Rq6UR6BTi4LED6X0kSDIlyaWI9EjhT4ukDbepsI00xfQ");
@@ -47,10 +47,10 @@ public class MessageApplication extends Application {
         preferences.edit().putFloat(KEY_SEARCH_DISTANCE, value).commit();
     }
 
-    public static void updateParseInstallation(ParseUser user){
-        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.put(ParseConstants.KEY_USER_ID,user.getObjectId());
-        installation.saveInBackground();
-    }
+//    public static void updateParseInstallation(ParseUser user){
+//        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//        installation.put(ParseConstants.KEY_USER_ID,user.getObjectId());
+//        installation.saveInBackground();
+//    }
 
 }

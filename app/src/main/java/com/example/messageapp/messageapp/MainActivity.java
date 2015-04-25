@@ -211,19 +211,19 @@ public class MainActivity extends FragmentActivity implements
             twitterMakeRequest();
         }*/
 
-        ParseAnalytics.trackAppOpened(getIntent());
+        //ParseAnalytics.trackAppOpened(getIntent());
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
+        }else if (ParseFacebookUtils.isLinked(currentUser)) {
+            facebookMakeMeRequest();
+            Log.i(TAG,"facebookUser is logged in");
         }
         else {
             Log.i(TAG, currentUser.getUsername());
         }
 
-        if (ParseFacebookUtils.isLinked(currentUser)) {
 
-            facebookMakeMeRequest();
-        }
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -268,7 +268,7 @@ public class MainActivity extends FragmentActivity implements
                 .build();
 
         mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
@@ -283,6 +283,23 @@ public class MainActivity extends FragmentActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
@@ -400,6 +417,7 @@ public class MainActivity extends FragmentActivity implements
                     });
                 } else if (response.getError() != null) {
                     // handle error
+                    Log.d(TAG,"Erroradasdas");
                 }
             }
         }).executeAsync();
@@ -430,6 +448,7 @@ public class MainActivity extends FragmentActivity implements
 
         switch (itemId){
             case R.id.action_logout:
+                mGoogleApiClient.disconnect();
                 ParseUser.logOut();
                 navigateToLogin();
                 break;
@@ -492,7 +511,7 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.i(TAG, "Location services disconnected.");
     }
 
 
@@ -506,50 +525,52 @@ public class MainActivity extends FragmentActivity implements
         final double pLong = location.getLongitude();
         final double pLat = location.getLatitude();
         final ParseGeoPoint point = new ParseGeoPoint(pLong, pLat);
-        Log.d(TAG, location.toString());
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_LOCATION);
         query.include(ParseConstants.KEY_USER);
         query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> locations, ParseException ee) {
-                mLocations = locations;
-                String[] usernames = new String[mLocations.size()];
-                String[] objectId = new String[mLocations.size()];
-                int i = 0;
-                if (locations.size() == 0) {
-                    ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
-                    locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
-                    locationObject.put(ParseConstants.KEY_COORDINATES, point);
-                    try {
-                        locationObject.save();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Log.i(TAG, "Insert first time geolocations for current user");
-                    //navigateToMap();
-                }else if (locations.size() == 1) {
-                    for (ParseObject location : mLocations) {
-                        usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
-                        objectId[i] = location.getObjectId();
-                        //if exist make update
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
-                        // Retrieve the object by id
-                        query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
-                            public void done(ParseObject update, ParseException e) {
-                                if (e == null) {
-                                    update.put(ParseConstants.KEY_COORDINATES, point);
-                                    update.saveInBackground();
-                                    Log.i(TAG, "Location coordinates updated successfully");
+        try {
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> locations, ParseException ee) {
+                    mLocations = locations;
+                    String[] usernames = new String[mLocations.size()];
+                    String[] objectId = new String[mLocations.size()];
+                    int i = 0;
+                    if (locations.size() == 0) {
+                        ParseObject locationObject = new ParseObject(ParseConstants.CLASS_LOCATION);
+                        locationObject.put(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
+                        locationObject.put(ParseConstants.KEY_COORDINATES, point);
+                        try {
+                            locationObject.save();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Log.i(TAG, "Insert first time geolocations for current user");
+                        //navigateToMap();
+                    } else if (locations.size() == 1) {
+                        for (ParseObject location : mLocations) {
+                            usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
+                            objectId[i] = location.getObjectId();
+                            //if exist make update
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
+                            // Retrieve the object by id
+                            query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
+                                public void done(ParseObject update, ParseException e) {
+                                    if (e == null) {
+                                        update.put(ParseConstants.KEY_COORDINATES, point);
+                                        update.saveInBackground();
+                                        Log.i(TAG, "Location coordinates updated successfully");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        //navigateToMap();
                     }
-                    Log.i(TAG, "Username exists make update " + usernames[i] + " ====== " + ParseUser.getCurrentUser().getUsername());
-                    //navigateToMap();
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            Log.e(TAG,"RunTime Exception",e);
+        }
 
     }
 

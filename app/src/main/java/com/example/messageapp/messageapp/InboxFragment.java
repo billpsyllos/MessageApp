@@ -65,37 +65,41 @@ public class InboxFragment extends ListFragment {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_MESSAGES);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> messages, ParseException e) {
-                getActivity().setProgressBarIndeterminateVisibility(false);
+        try {
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> messages, ParseException e) {
+                    getActivity().setProgressBarIndeterminateVisibility(false);
 
-                if(mSwipeRefreshLayout.isRefreshing()){
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-
-                if(e == null){
-                    //success
-                    mMessages = messages;
-
-                    String[] usernames = new String[mMessages.size()];
-                    String[] descriptions = new String[mMessages.size()];
-                    int i = 0;
-                    for (ParseObject message : mMessages) {
-                        usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
-                        descriptions[i] = message.getString(ParseConstants.KEY_DESCRIPTION);
-                        i++;
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-                    if(getListView().getAdapter() == null) {
-                        MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
-                        setListAdapter(adapter);
-                    }else{
-                        //refill
-                        ((MessageAdapter)getListView().getAdapter()).refill(mMessages);
+
+                    if (e == null) {
+                        //success
+                        mMessages = messages;
+
+                        String[] usernames = new String[mMessages.size()];
+                        String[] descriptions = new String[mMessages.size()];
+                        int i = 0;
+                        for (ParseObject message : mMessages) {
+                            usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
+                            descriptions[i] = message.getString(ParseConstants.KEY_DESCRIPTION);
+                            i++;
+                        }
+                        if (getListView().getAdapter() == null) {
+                            MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
+                            setListAdapter(adapter);
+                        } else {
+                            //refill
+                            ((MessageAdapter) getListView().getAdapter()).refill(mMessages);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            Log.e(TAG,"RunTime Exception",e);
+        }
     }
 
     @Override
@@ -103,7 +107,6 @@ public class InboxFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         ParseObject message =  mMessages.get(position);
-        String descriptionLabel = message.getString(ParseConstants.KEY_DESCRIPTION);
         String messageType = message.getString(ParseConstants.KEY_FILE_TYPE);
         ParseFile file = message.getParseFile(ParseConstants.KEY_FILE);
         Uri fileUri = Uri.parse(file.getUrl());
