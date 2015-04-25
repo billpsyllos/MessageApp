@@ -1,7 +1,9 @@
 package com.example.messageapp.messageapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,17 +11,26 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
 
 public class ChatBoxActivity extends Activity {
+    protected EditText mPushText;
+    protected String mSenderId;
+    protected String mRecipientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_box);
 
-        EditText pushdText = (EditText) findViewById(R.id.pushText);
+
+        mSenderId = getIntent().getExtras().getString(ParseConstants.KEY_SENDER_ID);
+        mRecipientId = getIntent().getExtras().getString(ParseConstants.KEY_RECIPIENTS_ID);
+
+        mPushText = (EditText) findViewById(R.id.pushText);
+
         Button sendPush = (Button) findViewById(R.id.sendButton);
         sendPush.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +65,14 @@ public class ChatBoxActivity extends Activity {
 
     protected void sendPushNotifications(){
 
-//        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
-//        //query.whereEqualTo(ParseConstants.KEY_USER_ID,"")
-//
-//        //query
+
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        query.whereEqualTo(ParseConstants.KEY_USER_ID, mRecipientId);
+
+        ParsePush push = new ParsePush();
+        push.setQuery(query);
+        push.setMessage(String.valueOf(mPushText.getText()));
+        push.sendInBackground();
+
     }
 }

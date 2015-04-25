@@ -15,4 +15,7 @@
     <dimen name="senderDescriptionView_text_size">14dp</dimen>
     <dimen name="senderDescriptionView_padding_left">20dp</dimen>
     <dimen name="user_grid_spacing">8dp</dimen>
+    <dimen name="inbox_horizontal_margin">8dp</dimen>
+    <dimen name="inbox_Vertical_margin">8dp</dimen>
+    <dimen name="message_vertical_padding">8dp</dimen>
 </resources>

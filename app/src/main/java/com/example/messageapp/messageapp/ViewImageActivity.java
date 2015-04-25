@@ -43,44 +43,12 @@ public class ViewImageActivity extends Activity {
         setContentView(R.layout.activity_view_image);
 
         //TextView descriptionView = (TextView) findViewById(R.id.senderDescriptionView);
-        imageView = (ImageView)findViewById(R.id.imageView1);
-
-        pd = new ProgressDialog(this);
-        pd.setMessage("Downloading Image");
+        imageView = (ImageView)findViewById(R.id.imageView);
 
         Uri imageUri = getIntent().getData();
-        Log.i(TAG,"Image Uri ==== " + imageUri);
-/*        pd.show();
-        Picasso.with(this).load(imageUri.toString()).resize(50, 50)
-                .into(imageView);
-        pd.dismiss();
-*/
-        //new ImageDownloader().execute(imageUri.toString());
-        // Download Image from URL
-        InputStream input = null;
-        try {
-            input = new URL(imageUri.toString()
-            ).openStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Decode Bitmap
-        bitmap = BitmapFactory.decodeStream(input);
-        imageView.setImageBitmap(bitmap);
-        String descriptionText = getIntent().getExtras().getString(ParseConstants.KEY_DESCRIPTION);
-        Log.i(TAG, descriptionText);
-        //descriptionView.setText(descriptionText);
 
+        Picasso.with(this).load(imageUri.toString()).into(imageView);
 
-        /*
-        Timer time = new Timer();
-        time.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, 10*1000);
-        */
     }
 
 
@@ -98,44 +66,5 @@ public class ViewImageActivity extends Activity {
     }
 
 
-    private class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 
-        @Override
-        protected Bitmap doInBackground(String... URL) {
-            // TODO Auto-generated method stub
-            //return downloadBitmap(param[0]);
-            String imageURL = URL[0];
-            Bitmap bitmap = null;
-            try {
-                // Download Image from URL
-                InputStream input = new java.net.URL(imageURL).openStream();
-                // Decode Bitmap
-                bitmap = BitmapFactory.decodeStream(input);
-                imageView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-
-
-        @Override
-        protected void onPreExecute() {
-            Log.i("Async-Example", "onPreExecute Called");
-            pd.show();
-
-        }
-
-        @Override
-        protected void onPostExecute(final Bitmap result) {
-            Log.i("Async-Example", "onPostExecute Called");
-//            imageView.setImageBitmap(result);
-            pd.dismiss();
-            Log.d(TAG, String.valueOf(result));
-
-        }
-
-
-    }
 }

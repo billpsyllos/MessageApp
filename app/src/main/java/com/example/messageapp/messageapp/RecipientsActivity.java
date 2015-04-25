@@ -133,7 +133,6 @@ public class RecipientsActivity extends ListActivity {
                     dialog.show();
                 }else{
                     send(message);
-                    Log.i(TAG,"Message sent !!!!");
                     finish();
                     return true;
                 }
@@ -151,7 +150,7 @@ public class RecipientsActivity extends ListActivity {
                 if(e == null){
                     //success
                     Toast.makeText(RecipientsActivity.this,getString(R.string.success_message),Toast.LENGTH_LONG).show();
-                    Log.i(TAG,"Success !!!!");
+                    Log.i(TAG,"Message sent !!!!");
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
                     builder.setMessage(getString(R.string.error_sending_message))

@@ -1,43 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/messageicon"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="@dimen/messageIcon_padding_left"
-        android:paddingTop="@dimen/messageIcon_padding_top"
-        android:paddingBottom="@dimen/messageIcon_padding_bottom"
-        android:src="@drawable/ic_action_picture"/>
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/senderLabel"
-        android:paddingLeft="@dimen/senderLabel_padding_left"
-        android:paddingTop="@dimen/senderLabel_padding_top"
-        android:paddingBottom="@dimen/senderLabel_padding_bottom"
-        android:layout_alignBottom="@+id/messageicon"
-        android:layout_toRightOf="@+id/messageicon"
-        android:layout_toEndOf="@+id/messageicon" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageicon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/messageIcon_padding_left"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_action_picture"
+            android:contentDescription="@string/content_desc_message_icon"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/descriptionLabel"
-        android:layout_below="@+id/messageicon"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="@dimen/descriptionLabel_text_size"
-        android:paddingLeft="@dimen/discriptionLabel_padding_left"
-        android:paddingBottom="@dimen/descriptionLabel_padding_bottom"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Test Name"
+            android:id="@+id/senderLabel"
+            android:layout_toLeftOf="@+id/messageicon"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="@dimen/message_vertical_padding"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/timeLabel"
+            android:layout_below="@+id/senderLabel"
+            android:layout_toLeftOf="@+id/messageicon"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/message_vertical_padding"
+            android:textSize="12sp"
+            android:textColor="@color/light_gray"
+             />
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+            <!--android:id="@+id/descriptionLabel"-->
+            <!--android:layout_below="@+id/messageicon"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:textSize="@dimen/descriptionLabel_text_size"-->
+            <!--android:paddingLeft="@dimen/discriptionLabel_padding_left"-->
+            <!--android:paddingBottom="@dimen/descriptionLabel_padding_bottom"/>-->
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>
