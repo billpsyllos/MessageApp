@@ -11,6 +11,8 @@ import com.parse.ParseObject;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.PushService;
+import com.sinch.android.rtc.Sinch;
+import com.sinch.android.rtc.SinchClient;
 
 
 /**
@@ -35,7 +37,6 @@ public class MessageApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         ParseFacebookUtils.initialize(this);
         ParseTwitterUtils.initialize("WEG8zu3hpG0qLn0JkYDJ4nlBZ", "lh6vM4Rq6UR6BTi4LED6X0kSDIlyaWI9EjhT4ukDbepsI00xfQ");
-
 
     }
 

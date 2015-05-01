@@ -140,11 +140,15 @@ public class FindFriendsFragment extends Fragment {
     protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            Intent chatIntent = new Intent(getActivity(),MapActivity.class);
-            chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
-            chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
-            chatIntent.putExtra(ParseConstants.KEY_OBJECT_ID, objectId[position]);
+//            Intent chatIntent = new Intent(getActivity(),MapActivity.class);
+//            chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
+//            chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+//            chatIntent.putExtra(ParseConstants.KEY_OBJECT_ID, objectId[position]);
+//            startActivity(chatIntent);
+
+            Intent chatIntent = new Intent(getActivity(),ChatBoxActivity.class);
             startActivity(chatIntent);
+
         }
     };
 

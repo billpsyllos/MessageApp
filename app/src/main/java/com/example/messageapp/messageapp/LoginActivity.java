@@ -71,16 +71,16 @@ public class LoginActivity extends Activity {
         actionBar.hide();
 
 
-        mRessetPasswordView = (TextView)findViewById(R.id.ressetPasswordView);
-        mRessetPasswordView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ressetIntent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
-                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(ressetIntent);
-            }
-        });
+//        mRessetPasswordView = (TextView)findViewById(R.id.ressetPasswordView);
+//        mRessetPasswordView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent ressetIntent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+//                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                ressetIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(ressetIntent);
+//            }
+//        });
 
         mTwitterButton = (Button)findViewById(R.id.twitterButton);
         mTwitterButton.setOnClickListener(new View.OnClickListener() {
