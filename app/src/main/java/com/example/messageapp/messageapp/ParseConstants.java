@@ -34,6 +34,7 @@ public final class ParseConstants {
     public static final String KEY_PROFILE_PICTURE = "profilePicture";
     public static final String KEY_GENDER = "gender";
     public static final String KEY_AGE = "age";
+    public static final String EXTRA_DATA = "extraData";
 
 
 }

@@ -139,7 +139,8 @@
         </activity>
         <activity
             android:name=".ProfilePageActivity"
-            android:label="@string/title_activity_profile_page" >
+            android:label="@string/title_activity_profile_page"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".FindFriendsFragment"
@@ -147,7 +148,8 @@
         </activity>
         <activity
             android:name=".ChatBoxActivity"
-            android:label="@string/title_activity_chat_box" >
+            android:label="@string/title_activity_chat_box"
+            android:parentActivityName=".MainActivity">
         </activity>
 
 

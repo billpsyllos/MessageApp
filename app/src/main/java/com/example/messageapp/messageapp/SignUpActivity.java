@@ -3,6 +3,7 @@ package com.example.messageapp.messageapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -60,15 +61,12 @@ public class SignUpActivity extends Activity {
                 email = email.trim();
 
                 if(username.isEmpty() || password.isEmpty() || email.isEmpty() ){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                    builder.setMessage(R.string.sign_up_alertText )
-                        .setTitle(R.string.sign_up_error_title)
-                        .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    Utils.showDialog(SignUpActivity.this, R.string.err_fields_empty);
+                    return;
                 }else{
                     //create a user
-                    setProgressBarIndeterminateVisibility(true);
+                    final ProgressDialog dia = ProgressDialog.show(SignUpActivity.this, null,
+                            getString(R.string.alert_wait));
 
                     ParseUser  newUser = new ParseUser();
                     newUser.setUsername(username);
@@ -81,18 +79,19 @@ public class SignUpActivity extends Activity {
 
                             if ( e == null){
                                 //Succes
+                                dia.dismiss();
                                 //MessageApplication.updateParseInstallation(ParseUser.getCurrentUser());
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             }else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                builder.setMessage(e.getMessage() )
-                                        .setTitle(R.string.sign_up_error_title)
-                                        .setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                dia.dismiss();
+                                Utils.showDialog(
+                                        SignUpActivity.this,
+                                        getString(R.string.err_singup) + " "
+                                                + e.getMessage());
+                                e.printStackTrace();
                             }
                         }
                     });

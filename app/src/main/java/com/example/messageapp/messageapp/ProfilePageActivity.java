@@ -80,6 +80,8 @@ public class ProfilePageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
 
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         mProfileView = (ImageView) findViewById(R.id.defaultProfilePicture);
         profileViewClickListener();

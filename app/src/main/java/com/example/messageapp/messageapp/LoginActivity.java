@@ -3,6 +3,7 @@ package com.example.messageapp.messageapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -156,15 +157,12 @@ public class LoginActivity extends Activity {
                 password = password.trim();
 
                 if(username.isEmpty() || password.isEmpty() ){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setMessage(R.string.login_alertText )
-                            .setTitle(R.string.login_error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    Utils.showDialog(LoginActivity.this, R.string.err_fields_empty);
+                    return;
                 }else{
                     //Login
-                    setProgressBarIndeterminateVisibility(true);
+                    final ProgressDialog dia = ProgressDialog.show(LoginActivity.this, null,
+                            getString(R.string.alert_wait));
                     ParseUser.logInInBackground(username,password, new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
@@ -172,14 +170,15 @@ public class LoginActivity extends Activity {
                             if ( e == null){
                                 //Success!
                                 //MessageApplication.updateParseInstallation(user);
+                                dia.dismiss();
                                 navigateToMain();
                             }else{
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setMessage(e.getMessage() )
-                                        .setTitle(R.string.login_error_title)
-                                        .setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                dia.dismiss();
+                                Utils.showDialog(
+                                        LoginActivity.this,
+                                        getString(R.string.err_login) + " "
+                                                + e.getMessage());
+                                e.printStackTrace();
 
                             }
                         }
