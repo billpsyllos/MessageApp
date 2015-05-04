@@ -197,20 +197,6 @@ public class MainActivity extends FragmentActivity implements
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
-        // Fetch Facebook user info if the session is active
-//        Session session = Session.getActiveSession();
-//        if (session != null && session.isOpened()) {
-//            facebookMakeMeRequest();
-//            Log.d(TAG,"Facebook user logged in");
-//        }
-
-
-
-        // Fetch twitter user info
-        /*if (ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())) {
-            twitterMakeRequest();
-        }*/
-
         //ParseAnalytics.trackAppOpened(getIntent());
         final ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser == null) {
@@ -218,12 +204,13 @@ public class MainActivity extends FragmentActivity implements
         }else if (ParseFacebookUtils.isLinked(currentUser)) {
             facebookMakeMeRequest();
             Log.i(TAG,"facebookUser is logged in");
+        }else if(ParseTwitterUtils.isLinked(ParseUser.getCurrentUser())){
+            twitterMakeRequest();
+            Log.i(TAG,"TwitterUser is logged in");
         }
         else {
             Log.i(TAG, currentUser.getUsername());
         }
-
-
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -426,7 +413,9 @@ public class MainActivity extends FragmentActivity implements
     }
     private void twitterMakeRequest() {
 
+
         ParseUser mUser = ParseUser.getCurrentUser();
+
         mUser.put(ParseConstants.KEY_USERNAME, ParseTwitterUtils.getTwitter().getScreenName());
         mUser.saveInBackground(new SaveCallback() {
             public void done(com.parse.ParseException e) {

@@ -82,9 +82,11 @@
             android:layout_marginTop="@dimen/pad_10dp">
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/facebook_icon"
+                android:drawablePadding="@dimen/pad_10dp"
                 android:text="Log in with Facebook"
                 android:textColor="@android:color/white"
                 android:background="#48449A"
@@ -93,10 +95,11 @@
                />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Log in with Twitter"
+                android:drawableLeft="@drawable/twitter_icon"
                 android:id="@+id/twitterButton"
                 android:background="#3A9EE5"
                 android:textColor="@android:color/white"

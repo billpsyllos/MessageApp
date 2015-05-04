@@ -86,6 +86,7 @@ public class LoginActivity extends Activity {
                         } else {
                             navigateToMain();
                             Log.d("MyApp", "User logged in through Twitter!");
+
                         }
                     }
                 });
