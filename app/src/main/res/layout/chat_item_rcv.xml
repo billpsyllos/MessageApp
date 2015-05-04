@@ -18,13 +18,7 @@
         android:paddingLeft="@dimen/pad_chat_item"
         android:paddingTop="@dimen/pad_5dp" >
 
-        <TextView
-            android:id="@+id/lbl1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@color/main_color_gray_dk"
-            android:textSize="@dimen/txt_13sp" />
+
         <TextView
             android:id="@+id/lbl2"
             android:layout_width="wrap_content"
@@ -35,6 +29,15 @@
             android:maxLines="4"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/lbl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/pad_10dp"
+        android:text="TextView"
+        android:textColor="@color/main_color_gray_dk"
+        android:textSize="@dimen/txt_13sp" />
 
     <TextView
         android:id="@+id/lbl3"
