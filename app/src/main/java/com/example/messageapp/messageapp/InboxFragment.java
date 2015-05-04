@@ -78,7 +78,6 @@ public class InboxFragment extends ListFragment {
                     if (e == null) {
                         //success
                         mMessages = messages;
-
                         String[] usernames = new String[mMessages.size()];
                         String[] descriptions = new String[mMessages.size()];
                         int i = 0;

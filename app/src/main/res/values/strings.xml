@@ -157,5 +157,6 @@
     <string name="msg_no_user_found">No users found for chat!</string>
 
     <string name="type_msg">Type message</string>
+    <string name="title_activity_friend_profile">FriendProfileActivity</string>
 
 </resources>

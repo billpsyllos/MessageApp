@@ -38,8 +38,7 @@ public class FindFriendsFragment extends Fragment {
     protected double currentUserlat;
     protected double guestLat;
     protected double guestLong;
-    protected ParseRelation<ParseUser> mPicturesRelation;
-    protected ParseUser mCurrentUser;
+    protected ParseUser[] mNearUser;
     protected String[] userIds;
     protected String[] usernames;
     protected Float[] userDist;
@@ -51,6 +50,8 @@ public class FindFriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_find_friends,
                 container, false);
+
+
 
         mGridView = (GridView) rootView.findViewById(R.id.gridView);
         mGridView.setOnItemClickListener(mOnItemClickListener);
@@ -98,6 +99,7 @@ public class FindFriendsFragment extends Fragment {
                     userIds = new String[mLocations.size()];
                     userDist = new Float[mLocations.size()];
                     objectId = new String[mLocations.size()];
+                    mNearUser = new ParseUser[mLocations.size()];
                     for (ParseObject location : mLocations) {
                         coordinats[i] = location.getParseGeoPoint(ParseConstants.KEY_COORDINATES);
                         guestLong = coordinats[i].getLongitude();
@@ -107,6 +109,7 @@ public class FindFriendsFragment extends Fragment {
                             usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
                             userIds[i] = location.getParseUser(ParseConstants.KEY_USER).getObjectId();
                             objectId[i] = location.getObjectId();
+                            mNearUser[i] = location.getParseUser(ParseConstants.KEY_USER);
                             Log.d(TAG, "Distance between current user and " + usernames[i] + " == " + String.valueOf(dist) + "Km");
                         }
                         i++;
@@ -140,14 +143,17 @@ public class FindFriendsFragment extends Fragment {
     protected AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            Intent chatIntent = new Intent(getActivity(),MapActivity.class);
-            chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
-            chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
-            chatIntent.putExtra(ParseConstants.KEY_OBJECT_ID, objectId[position]);
-            startActivity(chatIntent);
-
-//            Intent chatIntent = new Intent(getActivity(),ChatBoxActivity.class);
+//            Intent chatIntent = new Intent(getActivity(),MapActivity.class);
+//            chatIntent.putExtra(ParseConstants.KEY_RECIPIENTS_ID, userIds[position]);
+//            chatIntent.putExtra(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+//            chatIntent.putExtra(ParseConstants.KEY_OBJECT_ID, objectId[position]);
 //            startActivity(chatIntent);
+
+
+            Intent friendIntent = new Intent(getActivity(),FriendProfileActivity.class);
+            friendIntent.putExtra(ParseConstants.KEY_OBJECT_ID, userIds[position]);
+            friendIntent.putExtra(ParseConstants.KEY_USERNAME, usernames[position]);
+            startActivity(friendIntent);
 
         }
     };

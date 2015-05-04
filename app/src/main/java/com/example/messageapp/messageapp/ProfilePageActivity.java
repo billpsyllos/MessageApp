@@ -2,6 +2,8 @@ package com.example.messageapp.messageapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -51,7 +53,7 @@ public class ProfilePageActivity extends Activity {
     public static Drawable drawable;
     static boolean activeResults = false;
     protected ImageView mProfileView;
-
+    public static final int PIC_CROP = 5;
 
     protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
         @Override
@@ -120,18 +122,21 @@ public class ProfilePageActivity extends Activity {
                 if (data == null) {
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 }else {
-                    //we are passing that Uri back using getData()
                     mMediaUri = data.getData();
                     mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
-
+                    performCrop();
                 }
                 Log.i(TAG, "Media Uri: " + mMediaUri + " - File Type:  " + mFileType);
             }else if(requestCode == TAKE_PHOTO_REQUEST){
                 mFileType = getIntent().getExtras().getString(ParseConstants.KEY_FILE_TYPE);
                 Log.i(TAG, "Media Uri: " + mMediaUri + " - File Type:  " + mFileType);
+                performCrop();
+            }else if(requestCode == PIC_CROP){
+                Bundle extras = data.getExtras();
+                Bitmap thePic = extras.getParcelable("data");
+                ImageView picView = (ImageView)findViewById(R.id.defaultProfilePicture);
+                picView.setImageBitmap(thePic);
             }
-            ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
-            profileView.setImageURI(Uri.parse(String.valueOf(mMediaUri)));
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
@@ -187,16 +192,12 @@ public class ProfilePageActivity extends Activity {
             } else {
                 return null;
             }
-
             Log.d(TAG, "File: " +  Uri.fromFile(mediaFile) );
             return Uri.fromFile(mediaFile);
 
         }else{
             return null;
         }
-
-
-
     }
     private boolean isExternalStorageAvailable(){
         String state = Environment.getExternalStorageState();
@@ -209,6 +210,8 @@ public class ProfilePageActivity extends Activity {
     }
 
     private void checkIfUserHasProfile(){
+        final ProgressDialog dia = ProgressDialog.show(this, null,
+                getString(R.string.alert_wait));
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
         query.include(ParseConstants.KEY_USER);
@@ -216,6 +219,7 @@ public class ProfilePageActivity extends Activity {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> profilePictures, ParseException e) {
+                dia.dismiss();
                 mPictureProfiles = profilePictures;
                 String[] picturesProfilesId = new String[mPictureProfiles.size()];
                 int i = 0;
@@ -231,41 +235,6 @@ public class ProfilePageActivity extends Activity {
                         Uri fileUri = Uri.parse(file.getUrl());
                         Picasso.with(ProfilePageActivity.this).load(fileUri.toString()).into(mProfileView);
                         profileViewClickListener();
-
-
-//                        picturesProfilesId[i] = profilePicture.getObjectId();
-//                        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
-//                        query.getInBackground(picturesProfilesId[i], new GetCallback<ParseObject>() {
-//                            @Override
-//                            public void done(ParseObject object, ParseException e) {
-//                                ParseFile fileObject = (ParseFile) object.get(ParseConstants.KEY_PROFILE_PICTURE);
-//                                fileObject.getDataInBackground(new GetDataCallback() {
-//                                    @Override
-//                                    public void done(byte[] bytes, ParseException e) {
-//                                        if(e == null){
-//                                            Log.d(TAG,"We've got data in data");
-//                                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                                            ImageView profileView = (ImageView) findViewById(R.id.defaultProfilePicture);
-//                                            profileView.setImageBitmap(bmp);
-//                                            profileView.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View view) {
-//                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePageActivity.this);
-//                                                    builder.setItems(R.array.profile_camera_choices, mDialogListener);
-//                                                    AlertDialog dialog = builder.create();
-//                                                    dialog.show();
-//                                                }
-//                                            });
-//                                        }else {
-//                                            Log.d(TAG,"There was a problem downloading the data.");
-//
-//                                        }
-//
-//                                    }
-//                                });
-//
-//                            }
-//                        });
                     }
                     Log.d(TAG,"User has profile result===== " + result );
                 }
@@ -287,12 +256,16 @@ public class ProfilePageActivity extends Activity {
     }
 
     private void updateUserProfile(){
+        final ProgressDialog dia = ProgressDialog.show(this, null,
+                getString(R.string.alert_wait));
+
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER_PROFILE);
         query.include(ParseConstants.KEY_USER);
         query.whereEqualTo(ParseConstants.KEY_USER, ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> profiles, ParseException e) {
+                dia.dismiss();
                 mProfile = profiles ;
                 String[] objectId = new String[mProfile.size()];
                 int i = 0;
@@ -323,12 +296,9 @@ public class ProfilePageActivity extends Activity {
                             }
                         });
                     }
-
                 }
             }
         });
-
-
     }
 
     private ParseFile uploadFile(Uri mediaUri){
@@ -342,6 +312,33 @@ public class ProfilePageActivity extends Activity {
             String fileName = FileHelper.getFileNameProfile(this, mediaUri, "image");
             ParseFile file = new ParseFile(fileName,fileBytes);
             return file;
+        }
+    }
+
+    private void performCrop(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(mMediaUri, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

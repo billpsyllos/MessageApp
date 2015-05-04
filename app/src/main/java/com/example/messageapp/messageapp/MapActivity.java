@@ -91,11 +91,6 @@ public class MapActivity extends Activity {
 
             }
         });
-
-
-
-
-
     }
 
 

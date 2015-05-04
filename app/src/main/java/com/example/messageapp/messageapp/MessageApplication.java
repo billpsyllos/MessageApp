@@ -11,8 +11,6 @@ import com.parse.ParseObject;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.PushService;
-import com.sinch.android.rtc.Sinch;
-import com.sinch.android.rtc.SinchClient;
 
 
 /**
@@ -20,12 +18,9 @@ import com.sinch.android.rtc.SinchClient;
  */
 public class MessageApplication extends Application {
 
-    // Used to pass location from MainActivity to PostActivity
-    public static final String INTENT_EXTRA_LOCATION = "location";
 
     // Key for saving the search distance preference
     private static final String KEY_SEARCH_DISTANCE = "searchDistance";
-
     private static final float DEFAULT_SEARCH_DISTANCE = 250.0f;
     private static SharedPreferences preferences;
 
@@ -37,6 +32,8 @@ public class MessageApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         ParseFacebookUtils.initialize(this);
         ParseTwitterUtils.initialize("WEG8zu3hpG0qLn0JkYDJ4nlBZ", "lh6vM4Rq6UR6BTi4LED6X0kSDIlyaWI9EjhT4ukDbepsI00xfQ");
+
+        
 
     }
 
