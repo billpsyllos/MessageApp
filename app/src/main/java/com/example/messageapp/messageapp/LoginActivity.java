@@ -140,10 +140,10 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String username = mUsername.getText().toString();
-                String password = mPassword.getText().toString();
+                 String password = mPassword.getText().toString();
 
-                username = username.trim();
-                password = password.trim();
+                 username = username.trim();
+                 password = password.trim();
 
                 if(username.isEmpty() || password.isEmpty() ){
                     Utils.showDialog(LoginActivity.this, R.string.err_fields_empty);
@@ -158,7 +158,7 @@ public class LoginActivity extends Activity {
                             setProgressBarIndeterminateVisibility(false);
                             if ( e == null){
                                 //Success!
-                                //MessageApplication.updateParseInstallation(user);
+                                MessageApplication.updateParseInstallation(user);
                                 dia.dismiss();
                                 navigateToMain();
                             }else{

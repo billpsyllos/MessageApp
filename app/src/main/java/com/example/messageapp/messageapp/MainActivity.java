@@ -1,6 +1,7 @@
 package com.example.messageapp.messageapp;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -44,6 +45,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -80,6 +82,9 @@ public class MainActivity extends FragmentActivity implements
     protected ParseUser mUser;
     protected GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    protected static ParseRelation<ParseUser> mCurrentUserRelation;
+    protected static ParseUser mCurrentUser;
+    protected static ParseUser mToFriend;
 
 
 
@@ -265,6 +270,23 @@ public class MainActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
+        updateFriendRequests();
+
+
+        /*Intent intent = getIntent();
+        if (intent.hasExtra("userId")) {
+            Bundle extras = intent.getExtras();
+            String jsonData = extras.getString("com.parse.Data");
+            Log.i(TAG, jsonData);
+        }else{
+            Log.i(TAG, "no extrars noa puishs");
+        }
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            Log.i(TAG, String.valueOf(extras));
+        }*/
     }
 
     @Override
@@ -578,5 +600,57 @@ public class MainActivity extends FragmentActivity implements
             builder.create().show();
             return;
         }
+    }
+
+    public void updateFriendRequests(){
+        mCurrentUser = ParseUser.getCurrentUser();
+        mCurrentUserRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_FRIEND_REQUESTS);
+        query.whereEqualTo(ParseConstants.KEY_FROM_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(ParseConstants.KEY_REQUEST_STATUS_FROM_USER, "pending");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> friendRequests, ParseException e) {
+                if(friendRequests.size() != 0){
+                    for (ParseObject request : friendRequests) {
+                        mToFriend = request.getParseUser(ParseConstants.KEY_TO_USER);
+                        mCurrentUserRelation.add(mToFriend);
+                        mCurrentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e != null) {
+                                    Log.e("TAG", e.getMessage());
+
+                                }else{
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                    builder.setMessage("We have a friendship!!!!")
+                                            .setPositiveButton("See user", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    // FIRE ZE MISSILES!
+                                                    Intent friendIntent = new Intent(MainActivity.this,FriendProfileActivity.class);
+                                                    friendIntent.putExtra(ParseConstants.KEY_OBJECT_ID, mToFriend.getObjectId().toString());
+                                                    //friendIntent.putExtra(ParseConstants.KEY_USERNAME, mToFriend.getEmail());
+                                                    startActivity(friendIntent);
+                                                }
+                                            }).setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // User cancelled the dialog
+                                        }
+                                    }).show();
+                                }
+                            }
+                        });
+
+                        request.put(ParseConstants.KEY_REQUEST_STATUS_FROM_USER,"success");
+                        request.saveEventually();
+
+                    }
+                }
+            }
+        });
+
+
+
     }
 }

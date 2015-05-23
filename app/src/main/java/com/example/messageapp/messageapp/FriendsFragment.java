@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -34,6 +35,7 @@ public class FriendsFragment extends ListFragment {
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
     protected List<ParseUser> mFriends;
+    protected List<ParseObject> mRequests;
     protected ParseRelation<ParseUser> mFriendsRelation;
     protected ParseUser mCurrentUser;
     protected String[] senderObjectId;
@@ -55,8 +57,6 @@ public class FriendsFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         loadUserList();
-
-
     }
 
     @Override
@@ -73,6 +73,7 @@ public class FriendsFragment extends ListFragment {
 
         final ProgressDialog dia = ProgressDialog.show(this.getActivity(), null,
                 getString(R.string.alert_loading));
+
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
         getActivity().setProgressBarIndeterminateVisibility(true);

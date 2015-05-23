@@ -155,6 +155,11 @@
             android:label="@string/title_activity_chat_box"
             android:parentActivityName=".MainActivity" >
         </activity>
+        <activity
+            android:name=".FriendProfileActivity"
+            android:label="@string/title_activity_friend_profile"
+            android:parentActivityName=".MainActivity" >>
+        </activity>
 
         <service android:name="com.parse.PushService" />
 
@@ -185,11 +190,7 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".FriendProfileActivity"
-            android:label="@string/title_activity_friend_profile"
-            android:parentActivityName=".MainActivity" >>
-        </activity>
+
     </application>
 
 </manifest>

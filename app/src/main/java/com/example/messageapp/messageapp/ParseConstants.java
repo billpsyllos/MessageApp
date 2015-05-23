@@ -10,7 +10,7 @@ public final class ParseConstants {
     //Fields names
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_USERNAME = "username";
-    public  static final    String  KEY_USER_ID = "userId";
+    public static final String  KEY_USER_ID = "userId";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_OBJECT_ID = "objectId";
     public static final String KEY_FRIENDS_RELATION = "friendsRelation";
@@ -35,6 +35,11 @@ public final class ParseConstants {
     public static final String KEY_GENDER = "gender";
     public static final String KEY_AGE = "age";
     public static final String EXTRA_DATA = "extraData";
+    public static final String CLASS_FRIEND_REQUESTS = "friendRequests";
+    public static final String KEY_FROM_USER = "fromUser";
+    public static final String KEY_TO_USER = "toUser";
+    public static final String KEY_REQUEST_STATUS_FROM_USER = "statusFromUser";
+    public static final String KEY_REQUEST_STATUS_TO_USER = "statusToUser";
 
 
 }
