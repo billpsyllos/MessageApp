@@ -35,7 +35,7 @@ public class ChatBoxActivity extends Activity {
     protected EditText mPushText;
     protected String mSenderName;
     protected ParseUser mCurrentUser;
-    protected String mRecipientId;
+    protected String mRecipientName;
 
     /** The Conversation list. */
     private ArrayList<Conversation> convList;
@@ -77,7 +77,7 @@ public class ChatBoxActivity extends Activity {
 
 
         //mSenderName = getIntent().getExtras().getString(ParseConstants.KEY_SENDER_ID);
-        mRecipientId = getIntent().getExtras().getString(ParseConstants.KEY_SENDER_ID);
+        mRecipientName = getIntent().getExtras().getString(ParseConstants.KEY_SENDER_ID);
         mSenderName = ParseUser.getCurrentUser().getUsername().toString();
 
         convList = new ArrayList<Conversation>();
@@ -95,7 +95,7 @@ public class ChatBoxActivity extends Activity {
             }
         });
 
-        getActionBar().setTitle(mSenderName);
+        getActionBar().setTitle(mRecipientName);
 
         handler = new Handler();
 
@@ -162,7 +162,7 @@ public class ChatBoxActivity extends Activity {
 
         ParseObject po = new ParseObject("Chat");
         po.put("sender",mSenderName);
-        po.put("receiver", mRecipientId);
+        po.put("receiver", mRecipientName);
         // po.put("createdAt", "");
         po.put("message", s);
         po.saveEventually(new SaveCallback() {
@@ -186,7 +186,7 @@ public class ChatBoxActivity extends Activity {
         {
             // load all messages...
             ArrayList<String> al = new ArrayList<String>();
-            al.add(mRecipientId);
+            al.add(mRecipientName);
             al.add(mSenderName);
             q.whereContainedIn("sender", al);
             q.whereContainedIn("receiver", al);
@@ -196,7 +196,7 @@ public class ChatBoxActivity extends Activity {
             // load only newly received message..
             if (lastMsgDate != null)
                 q.whereGreaterThan("createdAt", lastMsgDate);
-            q.whereEqualTo("sender", mRecipientId);
+            q.whereEqualTo("sender", mRecipientName);
             q.whereEqualTo("receiver", mSenderName);
         }
         q.orderByDescending("createdAt");

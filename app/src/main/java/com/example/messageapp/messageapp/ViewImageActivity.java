@@ -1,5 +1,6 @@
 package com.example.messageapp.messageapp;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.internal.ImageDownloader;
+import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpEntity;
@@ -35,23 +37,19 @@ public class ViewImageActivity extends Activity {
     public static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog pd;
     private ImageView imageView;
-    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
-        //TextView descriptionView = (TextView) findViewById(R.id.senderDescriptionView);
+        final ActionBar actionBar = getActionBar();
+        actionBar.setTitle("Inbox");
+
         imageView = (ImageView)findViewById(R.id.imageView);
-
         Uri imageUri = getIntent().getData();
-
         Picasso.with(this).load(imageUri.toString()).into(imageView);
-
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,7 +62,5 @@ public class ViewImageActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }

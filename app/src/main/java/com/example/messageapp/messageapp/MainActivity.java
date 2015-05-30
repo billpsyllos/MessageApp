@@ -220,6 +220,7 @@ public class MainActivity extends FragmentActivity implements
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setTitle(ParseUser.getCurrentUser().getUsername());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
@@ -271,22 +272,6 @@ public class MainActivity extends FragmentActivity implements
         super.onResume();
         mGoogleApiClient.connect();
         updateFriendRequests();
-
-
-        /*Intent intent = getIntent();
-        if (intent.hasExtra("userId")) {
-            Bundle extras = intent.getExtras();
-            String jsonData = extras.getString("com.parse.Data");
-            Log.i(TAG, jsonData);
-        }else{
-            Log.i(TAG, "no extrars noa puishs");
-        }
-
-        ParseAnalytics.trackAppOpenedInBackground(getIntent());
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            Log.i(TAG, String.valueOf(extras));
-        }*/
     }
 
     @Override
@@ -390,12 +375,6 @@ public class MainActivity extends FragmentActivity implements
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-    private void navigateToMap(){
-        Intent mapIntent = new Intent(this,MapActivity.class);
-        mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mapIntent);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -403,9 +382,9 @@ public class MainActivity extends FragmentActivity implements
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     private void facebookMakeMeRequest() {
         //String accessToken = FacebookSdk.getClientToken();
-
         GraphRequestAsyncTask request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject user, GraphResponse response) {
@@ -430,14 +409,10 @@ public class MainActivity extends FragmentActivity implements
                 }
             }
         }).executeAsync();
-
-
     }
+
     private void twitterMakeRequest() {
-
-
         ParseUser mUser = ParseUser.getCurrentUser();
-
         mUser.put(ParseConstants.KEY_USERNAME, ParseTwitterUtils.getTwitter().getScreenName());
         mUser.saveInBackground(new SaveCallback() {
             public void done(com.parse.ParseException e) {
@@ -449,7 +424,6 @@ public class MainActivity extends FragmentActivity implements
                 }
             }
         });
-
     }
 
 
@@ -484,11 +458,8 @@ public class MainActivity extends FragmentActivity implements
                 break;
         }
 
-
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public void onTabSelected(ActionBar.Tab tab,
@@ -557,14 +528,11 @@ public class MainActivity extends FragmentActivity implements
                             e.printStackTrace();
                         }
                         Log.i(TAG, "Insert first time geolocations for current user");
-                        //navigateToMap();
                     } else if (locations.size() == 1) {
                         for (ParseObject location : mLocations) {
                             usernames[i] = location.getParseUser(ParseConstants.KEY_USER).getUsername();
                             objectId[i] = location.getObjectId();
-                            //if exist make update
                             ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_LOCATION);
-                            // Retrieve the object by id
                             query.getInBackground(objectId[i], new GetCallback<ParseObject>() {
                                 public void done(ParseObject update, ParseException e) {
                                     if (e == null) {
@@ -575,14 +543,12 @@ public class MainActivity extends FragmentActivity implements
                                 }
                             });
                         }
-                        //navigateToMap();
                     }
                 }
             });
         }catch (Exception e){
             Log.e(TAG,"RunTime Exception",e);
         }
-
     }
 
     public void checkIfLocationsIsEnable(){
@@ -596,7 +562,6 @@ public class MainActivity extends FragmentActivity implements
                     startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 }
             });
-            //builder.setNegativeButton(R.string.no, null);
             builder.create().show();
             return;
         }
@@ -649,8 +614,5 @@ public class MainActivity extends FragmentActivity implements
                 }
             }
         });
-
-
-
     }
 }

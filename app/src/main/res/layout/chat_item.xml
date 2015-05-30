@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/userLabelId"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/arrow"
-        android:padding="@dimen/pad_10dp"
-        android:text="TextView"
-        android:textColor="@color/main_color_gray_dk"
-        android:textSize="@dimen/txt_18sp"
-        android:drawableLeft="@drawable/ic_online"
-        android:drawablePadding="@dimen/pad_10dp"
-        />
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:id="@+id/userIcon"
+            android:paddingLeft="@dimen/messageIcon_padding_left"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/pad_10dp"
+            android:src="@drawable/default_profile_picture"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_desc_message_icon"/>
 
+        <TextView
+            android:id="@+id/userLabelId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/userIcon"
+            android:text="TextView"
+            android:textColor="@color/main_color_gray_dk"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:drawableRight="@drawable/arrow"
+            android:drawablePadding="50dp"
+            android:paddingBottom="@dimen/message_vertical_padding"
+            android:textSize="16sp"
+            />
+            <!--android:drawableLeft="@drawable/ic_online"
+            android:drawablePadding="50dp"
+            android:drawableRight="@drawable/arrow"
+            android:padding="@dimen/pad_10dp"
+            -->
+
+
+
+    </RelativeLayout>
 </LinearLayout>

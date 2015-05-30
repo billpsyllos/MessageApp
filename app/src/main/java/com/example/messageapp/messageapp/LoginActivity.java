@@ -40,7 +40,6 @@ public class LoginActivity extends Activity {
     protected Button mSignUpButton;
     protected Button mFacebookButton;
     protected Button mTwitterButton;
-    protected TextView mRessetPasswordView;
     public static final String TAG = LoginActivity.class.getSimpleName();
 
 
@@ -51,22 +50,6 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
-        // Add code to print out the key hash
-        /*try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.messageapp.messageapp",
-                    PackageManager.GET_SIGNATURES);
-            for (android.content.pm.Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }*/
-
         isMobileDataEnabled();
         ActionBar actionBar = getActionBar();
         actionBar.hide();
@@ -75,21 +58,7 @@ public class LoginActivity extends Activity {
         mTwitterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseTwitterUtils.logIn(LoginActivity.this, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, ParseException err) {
-                        if (user == null) {
-                            Log.d("MyApp", "Uh oh. The user cancelled the Twitter login.");
-                        } else if (user.isNew()) {
-                            navigateToMain();
-                            Log.d("MyApp", "User signed up and logged in through Twitter!");
-                        } else {
-                            navigateToMain();
-                            Log.d("MyApp", "User logged in through Twitter!");
-
-                        }
-                    }
-                });
+                logInWithTwitter();
 
             }
         });
@@ -100,36 +69,16 @@ public class LoginActivity extends Activity {
         mFacebookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, ParseException err) {
-                        if (user == null) {
-                            Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-                        } else if (user.isNew()) {
-                            Log.d("MyApp", "User signed up and logged in through Facebook!");
-                            navigateToMain();
-                        } else {
-                            Log.d("MyApp", "User logged in through Facebook!");
-                            navigateToMain();
-                        }
-                    }
-                });
-
+                logInWithFacebook(permissions);
             }
         });
-
-
 
 
         mSignUpButton = (Button) findViewById(R.id.signupButton);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-
+                navigateToSignUp();
             }
         });
 
@@ -139,43 +88,89 @@ public class LoginActivity extends Activity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = mUsername.getText().toString();
-                 String password = mPassword.getText().toString();
+                logIn();
+            }
+        });
+    }
 
-                 username = username.trim();
-                 password = password.trim();
-
-                if(username.isEmpty() || password.isEmpty() ){
-                    Utils.showDialog(LoginActivity.this, R.string.err_fields_empty);
-                    return;
-                }else{
-                    //Login
-                    final ProgressDialog dia = ProgressDialog.show(LoginActivity.this, null,
-                            getString(R.string.alert_wait));
-                    ParseUser.logInInBackground(username,password, new LogInCallback() {
-                        @Override
-                        public void done(ParseUser user, ParseException e) {
-                            setProgressBarIndeterminateVisibility(false);
-                            if ( e == null){
-                                //Success!
-                                MessageApplication.updateParseInstallation(user);
-                                dia.dismiss();
-                                navigateToMain();
-                            }else{
-                                dia.dismiss();
-                                Utils.showDialog(
-                                        LoginActivity.this,
-                                        getString(R.string.err_login) + " "
-                                                + e.getMessage());
-                                e.printStackTrace();
-
-                            }
-                        }
-                    });
+    private void logInWithTwitter() {
+        ParseTwitterUtils.logIn(this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Twitter login.");
+                } else if (user.isNew()) {
+                    navigateToMain();
+                    Log.d("MyApp", "User signed up and logged in through Twitter!");
+                } else {
+                    navigateToMain();
+                    Log.d("MyApp", "User logged in through Twitter!");
 
                 }
             }
         });
+    }
+
+    private void logInWithFacebook(List<String> permissions) {
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                } else if (user.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                    navigateToMain();
+                } else {
+                    Log.d("MyApp", "User logged in through Facebook!");
+                    navigateToMain();
+                }
+            }
+        });
+    }
+
+    private void navigateToSignUp() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void logIn() {
+        String username = mUsername.getText().toString();
+        String password = mPassword.getText().toString();
+
+        username = username.trim();
+        password = password.trim();
+
+        if(username.isEmpty() || password.isEmpty() ){
+            Utils.showDialog(this, R.string.err_fields_empty);
+            return;
+        }else{
+            //Login
+            final ProgressDialog dia = ProgressDialog.show(this, null,
+                    getString(R.string.alert_wait));
+            ParseUser.logInInBackground(username, password, new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    setProgressBarIndeterminateVisibility(false);
+                    if (e == null) {
+                        //Success!
+                        MessageApplication.updateParseInstallation(user);
+                        dia.dismiss();
+                        navigateToMain();
+                    } else {
+                        dia.dismiss();
+                        Utils.showDialog(
+                                LoginActivity.this,
+                                getString(R.string.err_login) + " "
+                                        + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+            });
+
+        }
     }
 
     @Override
